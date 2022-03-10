@@ -1,0 +1,77 @@
+﻿@** Author: Jackson
+    * Date: 08/03/2022
+    * Version: 1.0.0.0
+    * Objective: Add User View*@
+
+@model Device_Tracking_System.Models.Account
+
+@{
+    ViewBag.Title = "AddUser";
+}
+
+@{
+    Html.EnableClientValidation();
+    Html.EnableUnobtrusiveJavaScript();
+}
+
+<script type="text/javascript">
+    $(function () {
+        $("#btnSubmitA").click(function () {
+            if ($("#addUser").valid()) {
+                $("#btnSubmitA").attr("disabled", "disabled");
+                $("#loading").fadeIn();
+                $("#addUser").submit();
+                document.onkeydown = function () {
+                    return false;
+                }
+            }
+        });
+    });
+
+    $(document).ready(function () {
+        $(this).keypress(function (event) {
+            if (event.keyCode === 13) {
+                $("#btnSubmitA").click();
+            }
+        });
+    });
+</script>
+
+
+@using (Html.BeginForm("AddUserAccount", "Account", FormMethod.Post, new { id = "addUser" }))
+{
+<div class=" container form-horizontal">
+    <h3>Add User</h3>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(model => model.Username, htmlAttributes: new { @class = "control-label col-md-2" })
+        @*<div class="col-md-10">*@
+        @Html.EditorFor(model => model.Username, new { htmlAttributes = new { @id = "txtLot", @class = "form-control", @style = "text-transform:uppercase", autocomplete = "off", autofocus = "autofocus" } })
+        @Html.ValidationMessageFor(model => model.Username, "", new { @class = "text-danger" })
+        @*</div>*@
+    </div>
+    <div class="form-group">
+        <label id="binResult_Modal" class="control-label col-md-2">Role</label>
+        @Html.DropDownList("Role", new SelectList(ViewBag.Role, "RoleId", "RoleName"), new { @id = "BrID", @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Roles, "", new { @class = "text-danger" })
+    </div>
+
+
+    <div class="form-group">
+        <div class="col-md-5">
+            <input type="button" value="Submit" id="btnSubmitA" class="btn btn-warning" />
+        </div>
+    </div>
+</div>
+}
+
+<div id="loading">
+    <div id="loadingcontent">
+        <p id="loadingspinner">
+            <img src="~/Images/ajax-loader.gif" style="height:20px;width:20px" />
+            Processing Request... Please Wait...
+        </p>
+    </div>
+</div>
+

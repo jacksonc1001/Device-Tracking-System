@@ -1,0 +1,162 @@
+﻿@** Author: Jackson
+    * Date: 1/09/2021
+    * Version: 1.0.0.0
+    * Objective: Split Lot Grid View*@
+
+@using Device_Tracking_System.Models
+@model Device_Tracking_System.Models.DeviceValidation
+
+@{
+    ViewBag.Title = "FailedDeviceGridView";
+}
+
+@{
+    Html.EnableClientValidation();
+    Html.EnableUnobtrusiveJavaScript();
+}
+
+<script src="~/Scripts/sweetalart.min.js"></script>
+<link href="~/Content/sweetalert.css" rel="stylesheet" />
+
+@using (Html.BeginForm("GetDeviceIDFailedDevice", "DMCValidation", FormMethod.Post, new { id = "GetDeviceIdValidateFail" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h3>Validate Fail Device - @((Session["ValidateFailLotInfo"] as LotValidation).LotNumber)  (@((Session["ValidateFailLotInfo"] as LotValidation).Operation))</h3>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="row">
+            <div class="form-group">
+                @Html.LabelFor(model => model.DeviceId, htmlAttributes: new { @class = "control-label col-md-2" })
+                @*<div class="col-md-2">*@
+                    @Html.EditorFor(model => model.DeviceId, new { htmlAttributes = new { @id = "txtDevice", @class = "form-control", autofocus = "autofocus", autocomplete = "off" } })
+                    @Html.ValidationMessageFor(model => model.DeviceId, "", new { @class = "text-danger" })
+                @*</div>
+                <div class="col-md-2">*@
+                    <input type="button" value="Submit" id="btnSubmit" class="btn btn-warning" />
+                @*</div>*@
+            </div>
+        </div>
+    </div>
+}
+
+<div class="gridcontainer">
+    @{Html.RenderAction("FailedDeviceGridViewPartial");}
+</div>
+
+<div>
+    Quantity: @((Session["ValidateFailLotInfo"] as LotValidation).ScannedQuantity) / @((Session["ValidateFailLotInfo"] as LotValidation).Quantity)
+</div>
+
+@using (Html.BeginForm("FailedDeviceCancel", "DMCValidation", FormMethod.Post, new { id = "Cancel" }))
+{
+    <div style="padding: 5px; float: right">
+        <input type="button" value="Cancel" id="btnCancel" class="btn btn-danger" style="margin-left:10px" />
+    </div>
+}
+
+@using (Html.BeginForm("FailedDeviceConfirm", "DMCValidation", FormMethod.Post, new { id = "ValidateFail" }))
+{
+    <div style="padding: 5px; float: right">
+        <input type="button" value="Validate" id="btnValidate_FD" class="btn btn-warning" />
+    </div>
+}
+
+<div id="loading">
+    <div id="loadingcontent">
+        <p id="loadingspinner">
+            <img src="~/Images/ajax-loader.gif" style="height:20px;width:20px" />
+            Processing Request... Please Wait...
+        </p>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var deviceQuantity = @((Session["ValidateFailLotInfo"] as LotValidation).ScannedQuantity);
+    var packageQuantity = @((Session["ValidateFailLotInfo"] as LotValidation).Quantity);
+
+    $(document).ready(function () {
+        $("#txtDevice").keypress(function (event) {
+            if (event.keyCode === 13) {
+                $("#btnSubmit").click();
+            }
+        });
+    });
+
+    $(function () {
+        $("#btnSubmit").click(function () {
+            if ($("#GetDeviceIdValidateFail").valid()) {
+                $("#btnSubmit").attr("disabled", "disabled");
+                $("#btnCancel").attr("disabled", "disabled");
+                $("#btnSplit").attr("disabled", "disabled");
+                $("#loading").fadeIn();
+                $("#GetDeviceIdValidateFail").submit();
+                document.onkeydown = function () {
+                    return false;
+                }
+            }
+        });
+    });
+
+    $(function () {
+        $("#btnCancel").click(function () {
+            $("#loading").fadeIn();
+            $("#Cancel").submit();
+        });
+    });
+
+    $(document).ready(function () {
+        $(this).click(function () {
+            document.getElementById("txtDevice").focus();
+        });
+    });
+
+    $(document).ready(function () {
+        $("#btnValidate_FD").click(function () {
+            if (!(deviceQuantity == 0) /*&& deviceQuantity == packageQuantity*/) {
+                swal({
+                    title: "Are you sure to validate the lot?",
+                    text: "Scanned device: " + deviceQuantity + "! Please clicked confirm to validate the lot!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Confirm",
+                    cancelButtonText: "Cancel",
+                    closeOnConfirm: true,
+                    closeOnCancel: true,
+                    buttons: true,
+                    buttons: ["Cancel", "Confirm"]
+                },
+                    function (isConfirm) {
+                        if (isConfirm) {
+                            $('#ValidateFail').submit();
+                            $("#loading").fadeIn();
+                        }
+                    }
+                );
+            }
+            //else if (deviceQuantity >= packageQuantity) {
+            //    swal("Error", "The scanned quantity is more than the lot quantity!", "error");
+            //}
+            else {
+                swal("ERROR", "Please scan more devices to validate!", "error");
+            }
+        });
+    });
+
+    $(document).ready(function () {
+        var timestamp = new Date().getTime();
+
+        $("#txtDevice").keydown(function (event) {
+            var currentTimestamp = new Date().getTime();
+
+            if (currentTimestamp - timestamp > 50) {
+                event.preventDefault();
+            }
+
+            timestamp = currentTimestamp;
+
+        });
+    });
+</script>

@@ -1,0 +1,84 @@
+﻿@** Author: Jackson
+    * Date: 21/05/2021
+    * Version: 1.0.0.0
+    * Objective: Home View*@
+
+@{
+    ViewBag.Title = "Home Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="dejumbotron">
+    <h1>Device Tracking System</h1>
+    <p class="lead">
+        DTS, Device Tracking System is a system that enable user to split, merge and update the devices information. Besides, DTS will also split and merge the lot
+        when user splitting and merging the devices.
+    </p>
+    <p><a href="@Url.Action("DownloadDocument","Home")" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+</div>
+
+@if (Session["Role"].ToString() == "Operator")
+{
+    <div class="row">
+        <div class="col-md-4">
+            <h3 id="SplitLotTitle">Split Lot</h3>
+            <p id="SplitLot">
+                DTS providing an interface for user to scan the Device ID, validate and split the devices.
+            </p>
+            <p><a class="btn btn-default" href="@Url.Action("SplitStandardLotValidate", "SplitLot")">Go &raquo;</a></p>
+        </div>
+        <div class="col-md-4">
+            <h3 id="DMCTitle">Device Validation</h3>
+            <p id="DMCValidation">
+                DTS providing an interface for user to scan and validate the Devices.
+            </p>
+            <p><a class="btn btn-default" href="@Url.Action("PassedDeviceLotValidate", "DMCValidation")">Go &raquo;</a></p>
+        </div>
+        <div class="col-md-4">
+            <h3 id="MergeTitle">Merge Lot</h3>
+            <p id="MergeLot">DTS providing an interface for user to validate the mother lot and child lot, display the devices for the lots and merge the child lots with mother lot.</p>
+            <p><a class="btn btn-default" href="@Url.Action("MergeLotValidate", "MergeLot")">Go &raquo;</a></p>
+        </div>
+    </div>
+}
+else
+{
+<div class="row">
+    <div class="col-md-4">
+        <h3 id="SplitTitle">Split Devices</h3>
+        <p id="SplitDevice">
+            DTS providing an interface for user to validate the lot and select the devices to split.
+        </p>
+        <p><a class="btn btn-default" href="@Url.Action("LotValidate", "Split")">Go &raquo;</a></p>
+    </div>
+    <div class="col-md-4">
+        <h3 id="MergeTitle">Merge Devices</h3>
+        <p id="MergeLot">DTS providing an interface for user to validate the mother lot and child lot, display the devices for the lots and merge the child lots with mother lot.</p>
+        <p><a class="btn btn-default" href="@Url.Action("MergeLotValidate", "MergeLot")">Go &raquo;</a></p>
+    </div>
+    <div class="col-md-4">
+        <h3 id="UpdateTitle">Update Devices</h3>
+        <p id="UpdateDevice">DTS also provide an interface for technician and engineer to update the device information.</p>
+        <p id="Note">Note: This feature only can used by technician, engineer and administrator!</p>
+        <p><a class="btn btn-default" href="@Url.Action("UpdateRoleCheck", "Home")">Go &raquo;</a></p>
+    </div>
+</div>
+    <div class="row">
+        <div class="col-md-4">
+            <h3 id="DMCTitle">Device Validation</h3>
+            <p id="DMCValidation">
+                DTS providing an interface for user to scan and validate the Devices.
+            </p>
+            <p><a class="btn btn-default" href="@Url.Action("PassedDeviceLotValidate", "DMCValidation")">Go &raquo;</a></p>
+        </div>
+        <div class="col-md-4">
+            <h3 id="AuditTitle">View Audit Log</h3>
+            <p id="AudiLog">DTS also provide an audit log view for admin to trace the transaction.</p>
+            <p id="Note">Note: This feature only can used by administrator!</p>
+            @if (Session["Role"].ToString() == "Admin")
+            {
+                <p><a class="btn btn-default" href="@Url.Action("AuditLogRoleCheck", "Home")">Go &raquo;</a></p>
+            }
+        </div>
+    </div>
+    }

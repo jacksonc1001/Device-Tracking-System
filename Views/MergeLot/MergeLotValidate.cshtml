@@ -1,0 +1,116 @@
+﻿@* Author: Jackson
+    Date: 21/05/2021
+    Version: 1.0.0.0
+    Objective: Merge Device Lot Validate View
+
+    Author: Jackson
+    Date: 05/08/2021
+    Version: 2.0.0.0
+    Objective: Add in 3 more text boxes for child lot
+*@
+
+@model Device_Tracking_System.Models.MergeLot
+
+@{
+    ViewBag.Title = "MergeLotValidate";
+}
+
+@{
+    Html.EnableClientValidation();
+    Html.EnableUnobtrusiveJavaScript();
+}
+
+<script type="text/javascript">
+        $(function () {
+            $("#btnValidate").click(function () {
+                if ($("#MergeLotValidate").valid()) {
+                    $("#btnValidate").attr("disabled", "disabled");
+                    $("#loading").fadeIn();
+                    $("#MergeLotValidate").submit();
+                    document.onkeydown = function () {
+                        return false;
+                    }
+                }
+            });
+        });
+    //$(document).ready(function () {
+    //    $(this).click(function () {
+    //        document.getElementById("txtLot").focus();
+    //    });
+    //});
+
+    $(document).ready(function () {
+        $(this).keypress(function (event) {
+            if (event.keyCode === 13) {
+                $("#btnValidate").click();
+            }
+        });
+    });
+</script>
+
+@using (Html.BeginForm("MergeLotValidate", "MergeLot",FormMethod.Post, new { id = "MergeLotValidate"}))
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    <h3>Merge Devices</h3>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(model => model.MotherLotNumber, htmlAttributes: new { @class = "control-label col-md-2" })
+        @*<div class="col-md-10">*@
+            @Html.EditorFor(model => model.MotherLotNumber, new { htmlAttributes = new { @id = "txtLot", @class = "form-control", @style = "text-transform:uppercase", autocomplete = "off", autofocus = "autofocus" } })
+            @Html.ValidationMessageFor(model => model.MotherLotNumber, "", new { @class = "text-danger" })
+        @*</div>*@
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.ChildLotNumber, htmlAttributes: new { @class = "control-label col-md-2" })
+        @*<div class="col-md-10">*@
+            @Html.EditorFor(model => model.ChildLotNumber, new { htmlAttributes = new { @class = "form-control", @style = "text-transform:uppercase", autocomplete = "off" } })
+            @Html.ValidationMessageFor(model => model.ChildLotNumber, "", new { @class = "text-danger" })
+        @*</div>*@
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.ChildLotNumber2, htmlAttributes: new { @class = "control-label col-md-2" })
+        @*<div class="col-md-10">*@
+            @Html.EditorFor(model => model.ChildLotNumber2, new { htmlAttributes = new { @class = "form-control", @style = "text-transform:uppercase", autocomplete = "off" } })
+            @Html.ValidationMessageFor(model => model.ChildLotNumber2, "", new { @class = "text-danger" })
+        @*</div>*@
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.ChildLotNumber3, htmlAttributes: new { @class = "control-label col-md-2" })
+        @*<div class="col-md-10">*@
+            @Html.EditorFor(model => model.ChildLotNumber3, new { htmlAttributes = new { @class = "form-control", @style = "text-transform:uppercase", autocomplete = "off" } })
+            @Html.ValidationMessageFor(model => model.ChildLotNumber3, "", new { @class = "text-danger" })
+        @*</div>*@
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.ChildLotNumber4, htmlAttributes: new { @class = "control-label col-md-2" })
+        @*<div class="col-md-10">*@
+            @Html.EditorFor(model => model.ChildLotNumber4, new { htmlAttributes = new { @class = "form-control", @style = "text-transform:uppercase", autocomplete = "off" } })
+            @Html.ValidationMessageFor(model => model.ChildLotNumber4, "", new { @class = "text-danger" })
+        @*</div>*@
+    </div>
+
+    @*<div>@ViewBag.Message</div>*@
+
+    <div class="form-group">
+        <div class="col-md-5">
+            <input type="button" value="Validate" id="btnValidate" class="btn btn-warning" />
+        </div>
+    </div>
+</div>
+}
+
+<div id="loading">
+    <div id="loadingcontent">
+        <p id="loadingspinner">
+            <img src="~/Images/ajax-loader.gif" style="height:20px;width:20px" />
+            Processing Request... Please Wait...
+        </p>
+    </div>
+</div>

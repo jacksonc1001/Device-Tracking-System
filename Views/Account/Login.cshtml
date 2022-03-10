@@ -1,0 +1,113 @@
+﻿@** Author: Jackson
+* Date: 21/05/2021
+* Version: 1.0.0.0
+* Objective: Login View*@
+
+@model Device_Tracking_System.Models.Account
+
+@{
+    Layout = null;
+
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="~/Content/sweetalert.css" rel="stylesheet" />
+    <script src="~/Scripts/sweetalart.min.js"></script>
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+</head>
+
+<body>
+    @*style="background: url('@Url.Content(@System.Configuration.ConfigurationManager.AppSettings["LoginBackground"])');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;">
+        <img src="~/Images/osram-banner_1920_V1.jpg" class="headerImage" />*@
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+
+        $(function () {
+            $("#btnLogin").click(function () {
+                if ($("#frmLogin").valid()) {
+                    $("#frmLogin").submit();
+                    $("#loading").fadeIn();
+                    $("#btnLogin").attr('disabled', 'disabled');
+                    document.onkeydown = function () {
+                        return false;
+                    }
+                }
+            });
+        });
+
+        $(document).ready(function () {
+            $("#txt_password_start").keypress(function (event) {
+                if (event.keyCode === 13) {
+                    $("#btnLogin").click();
+                }
+            });
+        });
+    </script>
+
+    @using (Html.BeginForm("Login", "Account", FormMethod.Post, new { id = "frmLogin" }))
+    {
+        @Html.AntiForgeryToken()
+        <nav class="navbar navbar fixed-top navbar-expand-lg navbar-dark bg-dark navbar-fixed-top">
+            @*<a class="navbar-brand" href="#">*@<img class="Device_Tracking_System_Logo" src="~/Images/DTS_Logo.jpg">@*</a>*@
+        </nav>
+        <div class="launch_Login_Container">
+            <div class="form-inline justify-content-lg-center">
+                <label class="control-label" id="employee_id_label">Username</label>
+                @*<input type="text" class="form-control" name="txt_employee_id_start" id="txt_employee_id_start" placeholder="Username" data-error="Please input your windows username" required style="font-size:18px"
+            data-trigger="hover" data-placement="right" data-content="Please use windows username.">*@
+                @Html.EditorFor(model => model.Username, new { htmlAttributes = new { @class = "form-control", @id = "txt_employee_id_start", @placeholder = "Username", @title = "Please input your windows username." } })
+            </div>
+            <div class="form-inline justify-content-lg-center">
+                @Html.ValidationMessageFor(model => model.Username, "", new { @class = "text-danger" })
+            </div>
+            <br>
+            <div class="form-inline justify-content-lg-center">
+                <label class="control-label" id="password_label">Password</label>
+                @*<input type="password" class="form-control" name="txt_password_start" id="txt_password_start" placeholder="Password" data-error="Please input your windows password" required style="font-size:18px"
+            data-trigger="hover" data-placement="right" data-content="Please use windows password.">*@
+                @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", @id = "txt_password_start", @placeholder = "Password", @title = "Please use windows password." } })
+            </div>
+            <div class="form-inline justify-content-lg-center">
+                @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+            </div>
+            <br>
+            <div class="form-inline justify-content-lg-center">
+                <input type="button" class="um_Btn" value="LOGIN" id="btnLogin" />
+            </div>
+            <div class="help-block with-errors"></div>
+            @Html.Partial("_NotificationPanel")
+        </div>
+        @*<footer class="bottem-wthree-footer">
+                <p>
+                    Best Viewed on Google Chrome, IE 11.0 and above, Build Version: @System.Configuration.ConfigurationManager.AppSettings["Version"], DMA@OSRAM Opto Semiconductor (Malaysia) Sdn. Bhd.
+                </p>
+            </footer>*@
+        <div id="footer">
+
+            Best Viewed on Google Chrome, IE 11.0 and above. <br />
+            Build Version: @System.Configuration.ConfigurationManager.AppSettings["Version"]@*, DMA@OSRAM Opto Semiconductor (Malaysia) Sdn. Bhd*@.
+
+        </div>
+    }
+
+    <div id="loading">
+        <div id="loadingcontent">
+            <p id="loadingspinner">
+                <img src="~/Images/ajax-loader.gif" style="height:20px;width:20px" />
+                Processing Request... Please Wait...
+            </p>
+        </div>
+    </div>
+</body>
+</html>

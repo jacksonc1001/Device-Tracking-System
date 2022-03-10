@@ -1,0 +1,87 @@
+﻿@** Author: Jackson
+    * Date: 08/03/2022
+    * Version: 1.0.0.0
+    * Objective: Manage User Grid View*@
+
+@model IEnumerable<Device_Tracking_System.Models.Account>
+
+@{
+    var grid = Html.DevExpress().GridView(settings =>
+    {
+        settings.Name = "ModifyUserInfoGridView";
+        settings.CallbackRouteValues = new { Controller = "Account", Action = "ModifyUserInfoGridView" };
+        settings.SettingsEditing.BatchUpdateRouteValues = new { Controller = "Account", Action = "ModifyUserInfo" };
+
+        settings.SettingsEditing.Mode = GridViewEditingMode.Batch;
+        settings.SettingsEditing.BatchEditSettings.EditMode = GridViewBatchEditMode.Cell;
+        settings.SettingsEditing.BatchEditSettings.StartEditAction = GridViewBatchStartEditAction.Click;
+        settings.SettingsEditing.BatchEditSettings.ShowConfirmOnLosingChanges = true;
+        settings.Styles.BatchEditModifiedCell.BackColor = System.Drawing.Color.Yellow;
+        settings.SettingsBehavior.ConfirmDelete = true;
+
+
+        settings.Width = System.Web.UI.WebControls.Unit.Percentage(42);
+        settings.Height = System.Web.UI.WebControls.Unit.Percentage(70);
+
+        settings.SettingsPager.PageSize = 15;
+        settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+        settings.Settings.VerticalScrollableHeight = 240;
+        settings.SettingsPager.Position = System.Web.UI.WebControls.PagerPosition.Bottom;
+        settings.Settings.ShowFooter = true;
+
+        settings.CommandColumn.Visible = true;
+        settings.CommandColumn.ShowNewButton = false;
+        settings.CommandColumn.ShowDeleteButton = false;
+        settings.CommandColumn.ShowEditButton = false;
+        settings.CommandColumn.SelectAllCheckboxMode = GridViewSelectAllCheckBoxMode.AllPages;
+        settings.CommandColumn.ShowSelectCheckbox = true;
+        settings.CommandColumn.Width = System.Web.UI.WebControls.Unit.Pixel(65);
+        settings.CommandColumn.ShowClearFilterButton = true;
+
+        settings.KeyFieldName = "Username";
+
+        settings.SettingsPager.Visible = true;
+        settings.Settings.ShowGroupPanel = false;
+        settings.Settings.ShowFilterRow = true;
+        settings.SettingsBehavior.AllowSelectByRowClick = false;
+        settings.ClientSideEvents.BeginCallback = "OnBeginCallback";
+        settings.ClientSideEvents.SelectionChanged = "OnSelectionChanged";
+
+        settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCells;
+        settings.SettingsAdaptivity.AdaptiveColumnPosition = GridViewAdaptiveColumnPosition.Left;
+        settings.SettingsAdaptivity.AdaptiveDetailColumnCount = 1;
+        settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = true;
+        settings.SettingsAdaptivity.HideDataCellsAtWindowInnerWidth = 600;
+        settings.EditFormLayoutProperties.SettingsAdaptivity.AdaptivityMode = FormLayoutAdaptivityMode.SingleColumnWindowLimit;
+        settings.SettingsBehavior.AllowEllipsisInText = true;
+        settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Count, "UserId");
+
+        settings.Columns.Add(userId =>
+        {
+            userId.FieldName = "Username";
+            userId.Caption = "User ID";
+            userId.Width = 250;
+            userId.Settings.ShowEditorInBatchEditMode = false;
+        });
+        settings.Columns.Add(role =>
+        {
+            role.FieldName = "RoleId";
+            role.Width = 150;
+            role.Caption = "Role";
+            role.EditorProperties().ComboBox(c =>
+            {
+                c.TextField = "RoleName";
+                c.ValueField = "RoleId";
+                c.ValueType = typeof(int);
+                c.Width = 150;
+                c.DataSource = Device_Tracking_System.Controllers.AccountController.GetRoleList();
+            });
+        });
+    });
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@grid.Bind(Model).GetHtml()

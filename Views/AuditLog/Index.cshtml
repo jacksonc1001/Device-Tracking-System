@@ -1,0 +1,109 @@
+﻿@** Author: Jackson
+    * Date: 21/05/2021
+    * Version: 1.0.0.0
+    * Objective: Audit Log View*@
+
+@model Device_Tracking_System.Models.AuditLog
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@{
+    Html.EnableClientValidation();
+    Html.EnableUnobtrusiveJavaScript();
+}
+<link href="~/Content/themes/base/jquery-ui-lightness-min.css" rel="stylesheet" />
+
+@section Scripts{
+    @*<script src="~/Scripts/jquery-3.4.1.min.js"></script>*@
+    <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+    @*<script src="~/Scripts/jquery.validate.min.js"></script>
+        <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>*@
+
+    <script>
+        var daysToAdd = 1;
+        var startDates = $('#StartDate').datepicker({
+            maxDate: "+7d",
+            defaultDate: "+1w",
+            dateFormat: 'mm/dd/yy',
+            numberOfMonths: 1,
+            onSelect: function (selected) {
+                var dtMax = new Date(selected);
+                dtMax.setDate(dtMax.getDate() + daysToAdd);
+                var dd = dtMax.getDate();
+                var mm = dtMax.getMonth() + 1;
+                var y = dtMax.getFullYear();
+                var dtFormatted = mm + '/' + dd + '/' + y;
+                $('#EndDate').datepicker('option', 'minDate', dtFormatted);
+            },
+        }).attr("autocomplete", "off");
+
+        var endDates = $('#EndDate').datepicker({
+            minDate: new Date(),
+            maxDate: "+7d",
+            defaultDate: "+1w",
+            dateFormat: 'mm/dd/yy',
+            numberOfMonths: 1,
+        }).attr("autocomplete", "off");
+
+        //function OnSubmit(s, e) {
+        //    if ($("#AuditLog").valid()) {
+        //        $("#AuditLog").submit();
+        //        $("#loading").fadeIn();
+        //    };
+        //}
+        $(document).ready(function () {
+            $("#btnSubmit").click(function () {
+                if ($('#frmAuditLog').valid()) {
+                    $("#btnSubmit").attr("disabled", "disabled");
+                    $("#loading").fadeIn();
+                    $('#frmAuditLog').submit();
+                    document.onkeydown = function () {
+                        return false;
+                    }
+                }
+            });
+        });
+    </script>
+}
+
+@using (Html.BeginForm("GetAuditLog", "AuditLog", FormMethod.Post, new { id = "frmAuditLog" }))
+{
+    @Html.AntiForgeryToken()
+    HtmlHelper.UnobtrusiveJavaScriptEnabled = true;
+
+    <div class="form-horizontal">
+        <h3>AuditLog</h3>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="row" style="padding-left:15px">
+            <div class="form-group">
+                @Html.LabelFor(model => model.StartDate, htmlAttributes: new { @class = "control-label" })
+                @*<div class="col-md-2">*@
+                @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control col-md-3" } })
+                @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
+                @*</div>*@
+                @Html.LabelFor(model => model.EndDate, htmlAttributes: new { @class = "control-label", @id = "EndDate_Audit" })
+                @*<div class="col-md-2">*@
+                @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { @class = "form-control col-md-3" } })
+                @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
+                @*</div>*@
+                @*<div class="col-md-1">*@
+                <input type="button" value="Submit" id="btnSubmit" class="btn btn-warning" style="margin-left: 50px" />
+                @*</div>*@
+            </div>
+        </div>
+    </div>
+}
+
+@Html.Action("AuditLogGridViewPartial")
+
+<div id="loading">
+    <div id="loadingcontent">
+        <p id="loadingspinner">
+            <img src="~/Images/ajax-loader.gif" style="height:20px;width:20px" />
+            Processing Request... Please Wait...
+        </p>
+    </div>
+</div>
