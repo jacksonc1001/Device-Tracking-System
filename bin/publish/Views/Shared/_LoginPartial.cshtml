@@ -1,0 +1,49 @@
+﻿@** Author: Jackson
+    * Date: 21/05/2021
+    * Version: 1.0.0.0
+    * Objective: General shared user profile partial view*@
+
+@using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { @class = "navbar-right" }))
+{
+    @Html.AntiForgeryToken()
+    <ul class="nav navbar-nav navbar-right">
+        <li>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                Welcome @Session["User"].ToString()!
+                <span class="glyphicon glyphicon-triangle-bottom"></span>
+            </a>
+            <ul class="dropdown-menu" role="menu">
+                <li @*class="dropdown-submenu"*@>
+                    <a @*class="test"*@ tabindex="-1" href="@Url.Action("DownloadDocument","Home")">
+                        User Manual
+                        <span class="glyphicon glyphicon-info-sign"></span>
+                    </a>
+                    @*<ul class="dropdown-menu" role="menu">
+                            <li><a tabindex="-1" href="@Url.Action("ViewDocument","Home")">View In Browser</a></li>
+                            <li><a tabindex="-1" href="@Url.Action("DownloadDocument","Home")">Download</a></li>
+                        </ul>*@
+                </li>
+                @*<li><a href="#">View Profile</a></li>
+                    <li><a href="#">Edit Profile</a></li>
+                    <li><a href="#">Change Password</a></li>
+                    <li><a href="#">Setting</a></li>*@
+                <li>
+                    <a tabindex="-1" href="@Url.Action("Logout","Account")">
+                        Logout
+                        <span class="glyphicon glyphicon-log-out"></span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+}
+
+@*<script>
+        $(document).ready(function () {
+            $('.dropdown-submenu a.test').on("click", function (e) {
+                $(this).next('ul').toggle();
+                e.stopPropagation();
+                e.preventDefault();
+            });
+        });
+    </script>*@
