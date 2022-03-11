@@ -107,7 +107,7 @@ namespace Device_Tracking_System.Controllers
         }
         [CheckSessionTimeOut]
         [HttpPost]
-        public ActionResult AddUserAccount(Account user)
+        public ActionResult AddUser(AddUser user)
         {
             string errorMessage;
 
@@ -115,14 +115,14 @@ namespace Device_Tracking_System.Controllers
             {
                 try
                 {
-                    var dbResponse = BusinessLogic.DTSSQLDataAccess.AddUser(user.Username, user.RoleId);
+                    var dbResponse = BusinessLogic.DTSSQLDataAccess.AddUser(user.UserId, user.RoleId);
 
                     if (dbResponse.Item1 == 0)
                     {
                         List<Account> userInfo = new List<Account>();
                         userInfo.Add(new Account()
                         {
-                            Username = user.Username,
+                            Username = user.UserId,
                             RoleId = user.RoleId
                         });
                         var dtUserInfo = BusinessLogic.DTSSQLDataAccess.DTUserInfo(userInfo);
@@ -198,10 +198,20 @@ namespace Device_Tracking_System.Controllers
         public PartialViewResult ModifyUserInfoGridView()
         {
             var userList = BusinessLogic.DTSSQLDataAccess.GetAllUser();
-                
+
+            List<AddUser> users = new List<AddUser>();
+
+            var qty = userList.ToArray().GetLength(0);
+
+            for (int i = 0; i < qty; )
+            {
+                users.Add(new AddUser() { UserId = userList[i].Username, RoleId = userList[i].RoleId });
+                i++;
+            }
+
             if (userList != null)
             {
-                return PartialView("ModifyUserInfoGridView", userList);
+                return PartialView("ModifyUserInfoGridView", users);
             }
             else
             {
@@ -212,7 +222,7 @@ namespace Device_Tracking_System.Controllers
         }
         [CheckSessionTimeOut]
         [HttpPost]
-        public ActionResult ModifyUserInfo(MVCxGridViewBatchUpdateValues<Account, string> updateValues)
+        public ActionResult ModifyUserInfoEditing(MVCxGridViewBatchUpdateValues<AddUser, string> updateValues)
         {
             string errorMessage;
             
@@ -222,7 +232,20 @@ namespace Device_Tracking_System.Controllers
                 {
                     var updatedUserInfo = updateValues.Update.ToList();
 
-                    var dtUpdatedUserInfo = BusinessLogic.DTSSQLDataAccess.DTUserInfo(updatedUserInfo);
+                    var qty = updatedUserInfo.ToArray().GetLength(0);
+                    List<Account> userInfo = new List<Account>();
+
+                    for (int i = 0; i < qty;)
+                    {
+                        userInfo.Add(new Account()
+                        {
+                            Username = updatedUserInfo[i].UserId,
+                            RoleId = updatedUserInfo[i].RoleId
+                        });
+                        i++;
+                    }
+
+                    var dtUpdatedUserInfo = BusinessLogic.DTSSQLDataAccess.DTUserInfo(userInfo);
 
                     var dbResponse = BusinessLogic.DTSSQLDataAccess.ModifyUserInfo(dtUpdatedUserInfo);
 
@@ -253,14 +276,14 @@ namespace Device_Tracking_System.Controllers
                             if (string.IsNullOrEmpty(dbAuditResponse) == false)
                             {
                                 Alert("Successful Modify User Info!", Notification.NotificationType.success, "Success");
-                                return RedirectToAction("ModifyUserInfoGridView");
+                                return RedirectToAction("ModifyUserInfo");
                             }
                             else
                             {
                                 Alert("Error in saving audit log! Please verify with CIM Engineer", Notification.NotificationType.error,
                                     "Error");
                                 BusinessLogic.Log.WriteToErrorLogFile("Error in saving audit log! Please verify with CIM Engineer");
-                                return RedirectToAction("ModifyUserInfoGridView");
+                                return RedirectToAction("ModifyUserInfo");
                             }
                         }
                         else
@@ -268,13 +291,13 @@ namespace Device_Tracking_System.Controllers
                             Alert("Error in saving user management log! Please verify with CIM Engineer", Notification.NotificationType.error,
                                 "Error");
                             BusinessLogic.Log.WriteToErrorLogFile("Error in saving user management log! Please verify with CIM Engineer");
-                            return RedirectToAction("ModifyUserInfoGridView");
+                            return RedirectToAction("ModifyUserInfo");
                         }
                     }
                     else
                     {
                         Alert(dbResponse.Item2, Notification.NotificationType.error, "Error");
-                        return RedirectToAction("ModifyUserInfoGridView");
+                        return RedirectToAction("ModifyUserInfo");
                     }
                 }
                 catch (Exception ex)
@@ -282,14 +305,14 @@ namespace Device_Tracking_System.Controllers
                     errorMessage = ex.Message;
                     Alert(errorMessage, Notification.NotificationType.error, "Error");
                     BusinessLogic.Log.WriteToErrorLogFile(errorMessage);
-                    return View("ModifyUserInfoGridView");
+                    return View("ModifyUserInfo");
                 }
             }
             else
             {
                 Alert("Invalid data been entered! Please try again!", Notification.NotificationType.error, "Error");
                 BusinessLogic.Log.WriteToErrorLogFile("Invalid data been entered! Please try again!");
-                return RedirectToAction("ModifyUserInfoGridView");
+                return RedirectToAction("ModifyUserInfo");
             }
         }
         [CheckSessionTimeOut]
@@ -397,14 +420,14 @@ namespace Device_Tracking_System.Controllers
                             if (string.IsNullOrEmpty(dbAuditResponse) == false)
                             {
                                 Alert("Successful Delete User!", Notification.NotificationType.success, "Success");
-                                return RedirectToAction("ModifyUserInfoGridView");
+                                return RedirectToAction("ModifyUserInfo");
                             }
                             else
                             {
                                 Alert("Error in saving audit log! Please verify with CIM Engineer", Notification.NotificationType.error,
                                     "Error");
                                 BusinessLogic.Log.WriteToErrorLogFile("Error in saving audit log! Please verify with CIM Engineer");
-                                return RedirectToAction("ModifyUserInfoGridView");
+                                return RedirectToAction("ModifyUserInfo");
                             }
                         }
                         else
@@ -412,13 +435,13 @@ namespace Device_Tracking_System.Controllers
                             Alert("Error in saving user management log! Please verify with CIM Engineer", Notification.NotificationType.error,
                                 "Error");
                             BusinessLogic.Log.WriteToErrorLogFile("Error in saving user management log! Please verify with CIM Engineer");
-                            return RedirectToAction("ModifyUserInfoGridView");
+                            return RedirectToAction("ModifyUserInfo");
                         }
                     }
                     else
                     {
                         Alert(dbResponse.Item2, Notification.NotificationType.error, "Error");
-                        return RedirectToAction("ModifyUserInfoGridView");
+                        return RedirectToAction("ModifyUserInfo");
                     }
                 }
                 catch (Exception ex)
@@ -426,14 +449,14 @@ namespace Device_Tracking_System.Controllers
                     errorMessage = ex.Message;
                     Alert(errorMessage, Notification.NotificationType.error, "Error");
                     BusinessLogic.Log.WriteToErrorLogFile(errorMessage);
-                    return View("ModifyUserInfoGridView");
+                    return View("ModifyUserInfo");
                 }
             }
             else
             {
                 Alert("Invalid data been entered! Please try again!", Notification.NotificationType.error, "Error");
                 BusinessLogic.Log.WriteToErrorLogFile("Invalid data been entered! Please try again!");
-                return RedirectToAction("ModifyUserInfoGridView");
+                return RedirectToAction("ModifyUserInfo");
             }
         }
         public static IEnumerable GetRoleList()

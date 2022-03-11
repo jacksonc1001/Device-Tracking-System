@@ -3,7 +3,7 @@
     * Version: 1.0.0.0
     * Objective: Add User View*@
 
-@model Device_Tracking_System.Models.Account
+@model Device_Tracking_System.Models.AddUser
 
 @{
     ViewBag.Title = "AddUser";
@@ -16,11 +16,11 @@
 
 <script type="text/javascript">
     $(function () {
-        $("#btnSubmitA").click(function () {
-            if ($("#addUser").valid()) {
-                $("#btnSubmitA").attr("disabled", "disabled");
+        $("#btnAdd").click(function () {
+            if ($("#frmAddUser").valid()) {
+                $("#btnAdd").attr("disabled", "disabled");
                 $("#loading").fadeIn();
-                $("#addUser").submit();
+                $("#frmAddUser").submit();
                 document.onkeydown = function () {
                     return false;
                 }
@@ -31,36 +31,36 @@
     $(document).ready(function () {
         $(this).keypress(function (event) {
             if (event.keyCode === 13) {
-                $("#btnSubmitA").click();
+                $("#btnAdd").click();
             }
         });
     });
 </script>
 
 
-@using (Html.BeginForm("AddUserAccount", "Account", FormMethod.Post, new { id = "addUser" }))
+@using (Html.BeginForm("AddUser", "Account", FormMethod.Post, new { id = "frmAddUser" }))
 {
 <div class=" container form-horizontal">
     <h3>Add User</h3>
     <hr />
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     <div class="form-group">
-        @Html.LabelFor(model => model.Username, htmlAttributes: new { @class = "control-label col-md-2" })
+        @Html.LabelFor(model => model.UserId, htmlAttributes: new { @class = "control-label col-md-2" })
         @*<div class="col-md-10">*@
-        @Html.EditorFor(model => model.Username, new { htmlAttributes = new { @id = "txtLot", @class = "form-control", @style = "text-transform:uppercase", autocomplete = "off", autofocus = "autofocus" } })
-        @Html.ValidationMessageFor(model => model.Username, "", new { @class = "text-danger" })
+        @Html.EditorFor(model => model.UserId, new { htmlAttributes = new { @id = "txtLot", @class = "form-control", @style = "text-transform:uppercase", autocomplete = "off", autofocus = "autofocus" } })
+        @Html.ValidationMessageFor(model => model.UserId, "", new { @class = "text-danger" })
         @*</div>*@
     </div>
     <div class="form-group">
         <label id="binResult_Modal" class="control-label col-md-2">Role</label>
-        @Html.DropDownList("Role", new SelectList(ViewBag.Role, "RoleId", "RoleName"), new { @id = "BrID", @class = "form-control" })
-        @Html.ValidationMessageFor(m => m.Roles, "", new { @class = "text-danger" })
+        @Html.DropDownList("RoleId", new SelectList(ViewBag.Role, "RoleId", "RoleName"), new { @id = "usrId", @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Role, "", new { @class = "text-danger" })
     </div>
 
 
     <div class="form-group">
         <div class="col-md-5">
-            <input type="button" value="Submit" id="btnSubmitA" class="btn btn-warning" />
+            <input type="button" value="Add" id="btnAdd" class="btn btn-warning" />
         </div>
     </div>
 </div>

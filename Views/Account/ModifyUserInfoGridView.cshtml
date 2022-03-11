@@ -3,14 +3,14 @@
     * Version: 1.0.0.0
     * Objective: Manage User Grid View*@
 
-@model IEnumerable<Device_Tracking_System.Models.Account>
+@model IEnumerable<Device_Tracking_System.Models.AddUser>
 
 @{
     var grid = Html.DevExpress().GridView(settings =>
     {
-        settings.Name = "ModifyUserInfoGridView";
+        settings.Name = "ModifyUserGridView";
         settings.CallbackRouteValues = new { Controller = "Account", Action = "ModifyUserInfoGridView" };
-        settings.SettingsEditing.BatchUpdateRouteValues = new { Controller = "Account", Action = "ModifyUserInfo" };
+        settings.SettingsEditing.BatchUpdateRouteValues = new { Controller = "Account", Action = "ModifyUserInfoEditing" };
 
         settings.SettingsEditing.Mode = GridViewEditingMode.Batch;
         settings.SettingsEditing.BatchEditSettings.EditMode = GridViewBatchEditMode.Cell;
@@ -39,7 +39,7 @@
         settings.CommandColumn.Width = System.Web.UI.WebControls.Unit.Pixel(65);
         settings.CommandColumn.ShowClearFilterButton = true;
 
-        settings.KeyFieldName = "Username";
+        settings.KeyFieldName = "UserId";
 
         settings.SettingsPager.Visible = true;
         settings.Settings.ShowGroupPanel = false;
@@ -59,7 +59,7 @@
 
         settings.Columns.Add(userId =>
         {
-            userId.FieldName = "Username";
+            userId.FieldName = "UserId";
             userId.Caption = "User ID";
             userId.Width = 250;
             userId.Settings.ShowEditorInBatchEditMode = false;
@@ -78,6 +78,11 @@
                 c.DataSource = Device_Tracking_System.Controllers.AccountController.GetRoleList();
             });
         });
+        settings.CellEditorInitialize = (s, e) =>
+        {
+            ASPxEdit editor = (ASPxEdit)e.Editor;
+            editor.ValidationSettings.Display = Display.Dynamic;
+        };
     });
     if (ViewData["EditError"] != null)
     {

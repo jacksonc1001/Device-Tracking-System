@@ -16,10 +16,10 @@
 <script type="text/javascript">
     var selectedIDs = "";
     function OnBeginCallback(s, e) {
-        e.customArgs["Username"] = selectedIDs;
+        e.customArgs["UserId"] = selectedIDs;
     }
     function OnSelectionChanged(s, e) {
-        s.GetSelectedFieldValues("Username", GetSelectedFieldValuesCallback)
+        s.GetSelectedFieldValues("UserId", GetSelectedFieldValuesCallback)
     }
     function GetSelectedFieldValuesCallback(values) {
         selectedIDs = values.join(',');

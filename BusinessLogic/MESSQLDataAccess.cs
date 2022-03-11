@@ -140,7 +140,7 @@ namespace Device_Tracking_System.BusinessLogic
                     using (SqlCommand cmd = new SqlCommand("PR_MES_MergeLot", con))
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
-                        cmd.Parameters.AddWithValue("@I_LotNumber", lotNum);
+                        cmd.Parameters.AddWithValue("@I_MotherLot", lotNum);
                         cmd.Parameters.AddWithValue("@I_ChildLot", cLot);
                         cmd.Parameters.AddWithValue("@I_ChildLot2", cLot2);
                         cmd.Parameters.AddWithValue("@I_ChildLot3", cLot3);
