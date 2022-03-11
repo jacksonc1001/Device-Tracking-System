@@ -1,0 +1,92 @@
+﻿
+@using Device_Tracking_System.Models
+
+@{
+    ViewBag.Title = "ModifyUserInfo";
+}
+
+@{
+    Html.EnableClientValidation();
+    Html.EnableUnobtrusiveJavaScript();
+}
+
+<script src="~/Scripts/sweetalart.min.js"></script>
+<link href="~/Content/sweetalert.css" rel="stylesheet" />
+
+<script type="text/javascript">
+    var selectedIDs = "";
+    function OnBeginCallback(s, e) {
+        e.customArgs["UserId"] = selectedIDs;
+    }
+    function OnSelectionChanged(s, e) {
+        s.GetSelectedFieldValues("UserId", GetSelectedFieldValuesCallback)
+    }
+    function GetSelectedFieldValuesCallback(values) {
+        selectedIDs = values.join(',');
+    }
+    $(document).ready(function () {
+        var frm = $("#deleteUser");
+        frm.validate();
+    });
+    $(document).ready(function () {
+        $("#btnDelete").click(function () {
+            if (!(selectedIDs == "")) {
+                swal({
+                    title: "Are you sure to delete the user?",
+                    text: "Once the user deleted, It required to add the user back!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Confirm",
+                    cancelButtonText: "Cancel",
+                    closeOnConfirm: true,
+                    closeOnCancel: true,
+                    buttons: true,
+                    buttons: ["Cancel", "Confirm"]
+                },
+                    function (isConfirm) {
+                        if (isConfirm) {
+                            $("#selectedUserIDs").val(selectedIDs);
+                            $('#deleteUser').submit();
+                            $("#loading").fadeIn();
+                            document.onkeydown = function () {
+                                return false;
+                            }
+                        }
+                    }
+                );
+            }
+            else {
+                swal("ERROR", "Please select user to delete!", "Error");
+            }
+        });
+    });
+    function OnSelectedIndexChanged(s, e) {
+        UpdateGridView.AutoFilterByColumn("RoleId", s.GetText());
+    }
+</script>
+
+<div>
+    <h3 id="ModifyUserInfo">Manage User</h3>
+    @*<hr />*@
+</div>
+<div>
+    @{Html.RenderAction("ModifyUserInfoGridView");}
+</div>
+@using (Html.BeginForm("DeleteUser", "Account", FormMethod.Post, new { id = "deleteUser" }))
+{
+    @Html.Hidden("selectedUserIDs");
+
+    <div style="padding: 5px; float: right">
+        <input type="button" id="btnDelete" value="Delete User" class="btn btn-warning" />
+    </div>
+}
+<div id="loading">
+    <div id="loadingcontent">
+        <p id="loadingspinner">
+            <img src="~/Images/ajax-loader.gif" style="height:20px;width:20px" />
+            Processing Request... Please Wait...
+        </p>
+    </div>
+</div>
+

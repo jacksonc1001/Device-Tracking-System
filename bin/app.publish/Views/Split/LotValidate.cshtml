@@ -1,0 +1,83 @@
+﻿@** Author: Jackson
+    * Date: 21/05/2021
+    * Version: 1.0.0.0
+    * Objective: Split Lot Validate View*@
+
+@model Device_Tracking_System.Models.LotValidation
+
+@{
+    ViewBag.Title = "LotValidate";
+}
+
+@{
+    Html.EnableClientValidation();
+    Html.EnableUnobtrusiveJavaScript();
+}
+
+@*@section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }*@
+
+@*<script src="~/Scripts/jquery-3.4.1.min.js"></script>*@
+
+<script type="text/javascript">
+        $(function () {
+            $("#btnValidate").click(function () {
+                if ($("#SplitLotValidate").valid()) {
+                    $("#btnValidate").attr("disabled", "disabled");
+                    $("#loading").fadeIn();
+                    $("#SplitLotValidate").submit();
+                    document.onkeydown = function () {
+                        return false;
+                    }
+                }
+            });
+        });
+
+    $(document).ready(function () {
+        $(this).click(function () {
+            document.getElementById("txtLot").focus();
+        });
+    });
+
+    $(document).ready(function () {
+        $(this).keypress(function (event) {
+            if (event.keyCode === 13) {
+                $("#btnValidate").click();
+            }
+        });
+    });
+</script>
+
+@using (Html.BeginForm("LotValidate", "Split",FormMethod.Post, new { id = "SplitLotValidate"}))
+{
+    @Html.AntiForgeryToken()
+
+    <div class=" container form-horizontal">
+        <h3>Split Devices</h3>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.LotNumber, htmlAttributes: new { @class = "control-label col-md-2" })
+            @*<div class="col-md-10">*@
+                @Html.EditorFor(model => model.LotNumber, new { htmlAttributes = new { @id = "txtLot", @class = "form-control", @style = "text-transform:uppercase", autocomplete = "off", autofocus = "autofocus" } })
+                @Html.ValidationMessageFor(model => model.LotNumber, "", new { @class = "text-danger" })
+            @*</div>*@
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-5">
+                <input type="button" value="Validate" id="btnValidate" class="btn btn-warning" />
+            </div>
+        </div>
+    </div>
+}
+
+<div id="loading">
+    <div id="loadingcontent">
+        <p id="loadingspinner">
+            <img src="~/Images/ajax-loader.gif" style="height:20px;width:20px" />
+            Processing Request... Please Wait...
+        </p>
+    </div>
+</div>

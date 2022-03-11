@@ -1,0 +1,97 @@
+﻿@** Author: Jackson
+    * Date: 06/09/2021
+    * Version: 1.0.0.0
+    * Objective: Validate Fail Device GridView Partial View*@
+@using Device_Tracking_System.Models
+@model IEnumerable<Device_Tracking_System.Models.DeviceValidation>
+
+@{
+    var grid = Html.DevExpress().GridView(settings =>
+    {
+        settings.Name = "GridView";
+        settings.CallbackRouteValues = new { Controller = "DMCValidation", Action = "FailedDeviceGridViewPartial" };
+
+        settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "DMCValidation", Action = "FailedDeviceGridViewPartial" };
+        settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "DMCValidation", Action = "FailedDeviceGridViewPartial" };
+        settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "DMCValidation", Action = "FailedDeviceGridViewPartial" };
+        settings.SettingsEditing.Mode = GridViewEditingMode.EditFormAndDisplayRow;
+        settings.SettingsEditing.BatchEditSettings.ShowConfirmOnLosingChanges = true;
+        settings.Styles.BatchEditModifiedCell.BackColor = System.Drawing.Color.Yellow;
+        settings.SettingsBehavior.ConfirmDelete = true;
+
+        settings.Width = System.Web.UI.WebControls.Unit.Percentage(55);
+
+        settings.SettingsPager.PageSize = 15;
+        settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+        settings.Settings.VerticalScrollableHeight = 180;
+        settings.SettingsPager.Position = System.Web.UI.WebControls.PagerPosition.Bottom;
+        settings.Settings.ShowFooter = true;
+
+        settings.CommandColumn.Visible = false;
+        settings.CommandColumn.ShowNewButton = false;
+        settings.CommandColumn.ShowDeleteButton = false;
+        settings.CommandColumn.ShowEditButton = false;
+        settings.CommandColumn.SelectAllCheckboxMode = GridViewSelectAllCheckBoxMode.AllPages;
+        settings.CommandColumn.ShowSelectCheckbox = false;
+        settings.CommandColumn.Width = System.Web.UI.WebControls.Unit.Pixel(65);
+        settings.CommandColumn.ShowClearFilterButton = true;
+
+        settings.KeyFieldName = "DeviceId";
+
+        settings.SettingsPager.Visible = true;
+        settings.Settings.ShowGroupPanel = false;
+        settings.Settings.ShowFilterRow = true;
+        settings.SettingsBehavior.AllowSelectByRowClick = false;
+
+        settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCells;
+        settings.SettingsAdaptivity.AdaptiveColumnPosition = GridViewAdaptiveColumnPosition.Left;
+        settings.SettingsAdaptivity.AdaptiveDetailColumnCount = 1;
+        settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = true;
+        settings.SettingsAdaptivity.HideDataCellsAtWindowInnerWidth = 600;
+        settings.EditFormLayoutProperties.SettingsAdaptivity.AdaptivityMode = FormLayoutAdaptivityMode.SingleColumnWindowLimit;
+        settings.SettingsBehavior.AllowEllipsisInText = true;
+        settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Count, "DeviceId");
+
+        settings.Columns.Add(deviceId =>
+        {
+            deviceId.FieldName = "DeviceId";
+            deviceId.Caption = "DeviceId";
+            deviceId.Width = 150;
+        });
+        settings.Columns.Add(binResult =>
+        {
+            binResult.FieldName = "BinResult";
+            binResult.Width = 110;
+            binResult.Caption = "Bin Result";
+        });
+        settings.Columns.Add(binCode =>
+        {
+            binCode.FieldName = "BinCode";
+            binCode.Width = 110;
+            binCode.Caption = "Bin Code";
+        });
+        settings.Columns.Add(binDesc =>
+        {
+            binDesc.FieldName = "BinDesc";
+            binDesc.Width = 240;
+            binDesc.Caption = "Bin Desc";
+        });
+
+        settings.HtmlRowPrepared = (s, e) =>
+        {
+            if (e.RowType != GridViewRowType.Data) return;
+            string validateResult = e.GetValue("ValidateResult").ToString();
+
+            if (validateResult == null)
+                return;
+            else if (e.GetValue("ValidateResult").ToString() == "5" || e.GetValue("ValidateResult").ToString() == "4" || e.GetValue("ValidateResult").ToString() == "1"
+            || e.GetValue("ValidateResult").ToString() == "2")
+                e.Row.BackColor = System.Drawing.Color.Red;
+        };
+
+    });
+}
+@grid.Bind(Model).GetHtml()
+
+
