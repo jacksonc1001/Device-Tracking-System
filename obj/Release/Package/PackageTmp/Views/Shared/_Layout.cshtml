@@ -1,0 +1,177 @@
+﻿@** Author: Jackson
+    * Date: 21/05/2021
+    * Version: 1.0.0.0
+    * Objective: General shared layout view*@
+
+@if (HttpContext.Current.Session["Role"] == null)
+{
+    @Url.Action("Login", "Account")
+}
+else
+{
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>@ViewBag.Title - Device_Tracking_System</title>
+
+
+        @Styles.Render("~/Content/css")
+        @Scripts.Render("~/bundles/modernizr")
+
+        @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/jqueryval")
+        @Scripts.Render("~/bundles/bootstrap")
+
+
+        @Html.DevExpress().GetStyleSheets(
+            new StyleSheet { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+            new StyleSheet { ExtensionSuite = ExtensionSuite.Editors },
+            new StyleSheet { ExtensionSuite = ExtensionSuite.GridView }
+        )
+
+        @Html.DevExpress().GetScripts(
+            new Script { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+            new Script { ExtensionSuite = ExtensionSuite.Editors },
+            new Script { ExtensionSuite = ExtensionSuite.GridView }
+        )
+
+        <link href="~/Content/sweetalert.css" rel="stylesheet" />
+        <script src="~/Scripts/sweetalart.min.js"></script>
+
+    </head>
+    <body>
+        <script>
+            $(function () {
+                $("#logout_Tab").click(function () {
+                    $("#loading").fadeIn();
+                    $("#frmLogout").submit();
+                });
+            });
+        </script>
+        <nav class="navbar navbar fixed-top navbar-expand-lg navbar-dark bg-dark navbar-fixed-top">
+            <a class="navbar-brand" href="@Url.Action("Index","Home")"><img class="Device_Tracking_System_Logo" src="~/Images/DTS_Logo.jpg"></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon nav-color"></span>
+            </button>
+            <div class="navbar-header collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="nav navbar-nav mr-auto main-tabs" id="navbar-tabs">
+                    @if (Session["Role"].ToString() == "Operator")
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="dmcValidation_Tab" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Device Validation
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                @Html.ActionLink("Validate Pass Device", "PassedDeviceLotValidate", "DMCValidation", null, new { @class = "nav-link nav-color nav-btn", id = "validatePassDevice_Tab" })
+                                @Html.ActionLink("Validate Fail Device", "FailedDeviceLotValidate", "DMCValidation", null, new { @class = "nav-link nav-color nav-btn", id = "validateFailDevice_Tab" })
+                            </div>
+                        </li>
+                        <li class="nav-item" id="MergeLot" value="Merge Lot">
+                            @Html.ActionLink("Merge Devices", "MergeLotValidate", "MergeLot", null, new { @class = "nav-link nav-color nav-btn", id = "mergeLot_Tab" })
+                        </li>
+                        <li class="nav-item" id="SplitDevice" value="Split Devices">
+                            @Html.ActionLink("Split Devices", "LotValidate", "Split", null, new { @class = "nav-link nav-color nav-btn", id = "splitDevice_Tab" })
+                        </li>
+                    }
+                    else if (Session["Role"].ToString() == "Admin")
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="dmcValidation_Tab" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Device Validation
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                @Html.ActionLink("Validate Pass Device", "PassedDeviceLotValidate", "DMCValidation", null, new { @class = "nav-link nav-color nav-btn", id = "validatePassDevice_Tab" })
+                                @Html.ActionLink("Validate Fail Device", "FailedDeviceLotValidate", "DMCValidation", null, new { @class = "nav-link nav-color nav-btn", id = "validateFailDevice_Tab" })
+                            </div>
+                        </li>
+                        <li class="nav-item" id="MergeLot" value="Merge Devices">
+                            @Html.ActionLink("Merge Devices", "MergeLotValidate", "MergeLot", null, new { @class = "nav-link nav-color nav-btn", id = "mergeLot_Tab" })
+                        </li>
+                        <li class="nav-item" id="SplitDevice" value="Split Devices">
+                            @Html.ActionLink("Split Devices", "LotValidate", "Split", null, new { @class = "nav-link nav-color nav-btn", id = "splitDevice_Tab" })
+                        </li>
+                        <li class="nav-item" id="Update Device" value="Update Devices">
+                            @Html.ActionLink("Update Devices", "UpdateLotValidate", "Update", null, new { @class = "nav-link nav-color nav-btn", id = "updateDevice_Tab" })
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="admin_Tab" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Administration
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                @Html.ActionLink("Audit Log", "Index", "AuditLog", null, new { @class = "nav-link nav-color nav-btn", id = "auditLog_Tab" })
+                                @Html.ActionLink("Add User", "AddUser", "Account", null, new { @class = "nav-link nav-color nav-btn", id = "addUser_Tab" })
+                                @Html.ActionLink("Manage User", "ModifyUserInfo", "Account", null, new { @class = "nav-link nav-color nav-btn", id = "manageUser_Tab" })
+                            </div>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="dmcValidation_Tab" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Device Validation
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                @Html.ActionLink("Validate Pass Device", "PassedDeviceLotValidate", "DMCValidation", null, new { @class = "nav-link nav-color nav-btn", id = "validatePassDevice_Tab" })
+                                @Html.ActionLink("Validate Fail Device", "FailedDeviceLotValidate", "DMCValidation", null, new { @class = "nav-link nav-color nav-btn", id = "validateFailDevice_Tab" })
+                            </div>
+                        </li>
+                        <li class="nav-item" id="MergeLot" value="Merge Lot">
+                            @Html.ActionLink("Merge Devices", "MergeLotValidate", "MergeLot", null, new { @class = "nav-link nav-color nav-btn", id = "mergeLot_Tab" })
+                        </li>
+                        <li class="nav-item" id="SplitDevice" value="Split Device">
+                            @Html.ActionLink("Split Devices", "LotValidate", "Split", null, new { @class = "nav-link nav-color nav-btn", id = "splitDevice_Tab" })
+                        </li>
+                        <li class="nav-item" id="Update Device" value="Update Device">
+                            @Html.ActionLink("Update Devices", "UpdateLotValidate", "Update", null, new { @class = "nav-link nav-color nav-btn", id = "updateDevice_Tab" })
+                        </li>
+                    }
+                </ul>
+                <div class="form-inline my-2 my-lg-0" id="Device_Tracking_System_Login_Div">
+                    <ul class="nav navbar-nav mr-auto main-tabs" id="navbar-tabs">
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="user_Tab" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Welcome @Session["User"].ToString()!
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                @Html.ActionLink("User Manual", "DownloadDocument", "Home", null, new { @class = "nav-link nav-color nav-btn", id = "userManual_Tab" })
+                                @Html.ActionLink("Change Password", "ChangePassword", "Account", null, new { @class = "nav-link nav-color nav-btn", id = "changePass_Tab" })
+                                @using (Html.BeginForm("Logout", "Account", FormMethod.Post, new { id = "frmLogout" }))
+                                {
+                                    @*@Html.ActionLink("Log out", "Logout", "Account", null, new { @class = "nav-link nav-color nav-btn", id = "logout_Tab" })*@
+                                    <a class="nav-link nav-color nav-btn" id="logout_Tab">Logout</a>
+                                }
+
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div class="container body-content" id="BodyContainer">
+            @Html.Partial("_NotificationPanel")
+            @RenderBody()
+        </div>
+        <div id="footer">
+
+            Best Viewed on Google Chrome, IE 11.0 and above. <br />
+            Build Version: @System.Configuration.ConfigurationManager.AppSettings["Version"]@*, DMA@OSRAM Opto Semiconductor (Malaysia) Sdn. Bhd*@.
+
+        </div>
+        @*</div>*@
+        <div id="loading">
+            <div id="loadingcontent">
+                <p id="loadingspinner">
+                    <img src="~/Images/ajax-loader.gif" style="height:20px;width:20px" />
+                    Processing Request... Please Wait...
+                </p>
+            </div>
+        </div>
+
+        @RenderSection("scripts", required: false)
+    </body>
+</html>
+}
+

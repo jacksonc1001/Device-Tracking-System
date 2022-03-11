@@ -1,0 +1,186 @@
+﻿@** Author: Jackson
+    * Date: 21/05/2021
+    * Version: 1.0.0.0
+    * Objective: GridView*@
+
+@using System.Web.UI.WebControls
+
+@{
+    ViewBag.Title = "LotGridView";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    Html.EnableClientValidation();
+    Html.EnableUnobtrusiveJavaScript();
+}
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script src="~/Scripts/sweetalart.min.js"></script>
+<link href="~/Content/sweetalert.css" rel="stylesheet" />
+
+<script>
+    var motherlot = "@((Session["TempLotInfos"] as Device_Tracking_System.Models.MergeLot).MotherLotNumber)";
+    var childLot1 = "@((Session["TempLotInfos"] as Device_Tracking_System.Models.MergeLot).ChildLotNumber)";
+    var childLot2 = "@((Session["TempLotInfos"] as Device_Tracking_System.Models.MergeLot).ChildLotNumber2)";
+    var childLot3 = "@((Session["TempLotInfos"] as Device_Tracking_System.Models.MergeLot).ChildLotNumber3)";
+    var childLot4 = "@((Session["TempLotInfos"] as Device_Tracking_System.Models.MergeLot).ChildLotNumber4)";
+    var motherQuantity = "@((Session["TempLotInfos"] as Device_Tracking_System.Models.MergeLot).MotherQuantity)";
+    var childQuantity = "@((Session["TempLotInfos"] as Device_Tracking_System.Models.MergeLot).ChildLot1Quantity)";
+    var child2Quantity = "@((Session["TempLotInfos"] as Device_Tracking_System.Models.MergeLot).ChildLot2Quantity)";
+    var child3Quantity = "@((Session["TempLotInfos"] as Device_Tracking_System.Models.MergeLot).ChildLot3Quantity)";
+    var child4Quantity = "@((Session["TempLotInfos"] as Device_Tracking_System.Models.MergeLot).ChildLot4Quantity)";
+    var totalQuantity = parseInt(motherQuantity) + parseInt(childQuantity);
+    var strtext = motherlot + ": " + motherQuantity + "pcs"+ ", " + childLot1 + ": " + childQuantity + "pcs";
+
+    if (child2Quantity != null && child2Quantity != "" && child2Quantity != 0) {
+        strtext = strtext + ", " + childLot2 + ": " + child2Quantity + "pcs";
+        totalQuantity = totalQuantity + parseInt(child2Quantity);
+    }
+
+    if (child3Quantity != null && child3Quantity != "" && child3Quantity != 0) {
+        strtext = strtext + ", " + childLot3 + ": " + child3Quantity + "pcs";
+        totalQuantity = totalQuantity + parseInt(child3Quantity);
+    }
+
+    if (child4Quantity != null && child4Quantity != "" && child4Quantity != 0) {
+        strtext = strtext + ", " + childLot4 + ": " + child4Quantity + "pcs";
+        totalQuantity = totalQuantity + parseInt(child4Quantity);
+    }
+
+    function OnSubmitClick(s, e) {
+        swal({
+            title: "Are you sure to merge?",
+            text: strtext + ". Total: " + totalQuantity + "pcs",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Confirm",
+            cancelButtonText: "Cancel",
+            closeOnConfirm: true,
+            closeOnCancel: true,
+            buttons: true,
+            buttons: ["Cancel", "Confirm"]
+        },
+            function (isConfirm) {
+                if (isConfirm) {
+                    $("#Merge").submit();
+                    $("#loading").fadeIn();
+                    $("#btnConfirm").attr("disabled", "disabled");
+                    $("#btnCancel").attr("disabled", "disabled");
+                    document.onkeydown = function () {
+                        return false;
+                    }
+                }
+            }
+        );
+    }
+
+    $(function () {
+        $("#btnCancel").click(function () {
+            $("#loading").fadeIn();
+            $("#Cancel").submit();
+        });
+    });
+</script>
+
+
+@Html.DevExpress().PageControl(settings =>
+{
+    settings.Name = "PageControl";
+    settings.Width = Unit.Percentage(100);
+    settings.Height = Unit.Pixel(400);
+
+    var lotNum = Session["TempLotInfos"] as Device_Tracking_System.Models.MergeLot;
+
+    settings.TabPages.Add(mLotTab =>
+    {
+        mLotTab.Text = lotNum.MotherLotNumber + "-" + lotNum.MotherLotOperation;
+        mLotTab.SetContent(() =>
+        {
+
+            @Html.RenderAction("MotherLotGridViewPartial");
+
+        });
+    });
+    settings.TabPages.Add(cLotTab =>
+    {
+        cLotTab.Text = lotNum.ChildLotNumber + "-" + lotNum.ChildLot1Operation;
+        cLotTab.SetContent(() =>
+        {
+
+            @Html.RenderAction("ChildLotGridViewPartial");
+
+        });
+    });
+
+    if (lotNum.ChildLotNumber2 != null)
+    {
+        settings.TabPages.Add(cLotTab2 =>
+        {
+            cLotTab2.Text = lotNum.ChildLotNumber2 + "-" + lotNum.ChildLot2Operation;
+            cLotTab2.SetContent(() =>
+            {
+
+                @Html.RenderAction("ChildLot2GridViewPartial");
+
+            });
+        });
+    };
+    if (lotNum.ChildLotNumber3 != null)
+    {
+        settings.TabPages.Add(cLotTab3 =>
+        {
+            cLotTab3.Text = lotNum.ChildLotNumber3 + "-" + lotNum.ChildLot3Operation;
+            cLotTab3.SetContent(() =>
+            {
+
+                @Html.RenderAction("ChildLot3GridViewPartial");
+
+            });
+        });
+    };
+    if (lotNum.ChildLotNumber4 != null)
+    {
+    settings.TabPages.Add(cLotTab4 =>
+    {
+        cLotTab4.Text = lotNum.ChildLotNumber4 + "-" + lotNum.ChildLot4Operation;
+        cLotTab4.SetContent(() =>
+        {
+
+            @Html.RenderAction("ChildLot4GridViewPartial");
+
+        });
+    });
+    };
+
+}).GetHtml()
+
+
+@using (Html.BeginForm("MergeCancel", "MergeLot", FormMethod.Post, new { id = "Cancel" }))
+{
+    <div style="padding: 0px; float: right">
+        <input type="submit" value="Cancel" id="btnCancel" class="btn btn-danger" style="margin-left:10px" />
+    </div>
+}
+
+@using (Html.BeginForm("MergeConfirm", "MergeLot", FormMethod.Post, new { id = "Merge" }))
+{
+    <div style="padding: 0px; float: right">
+        @*<a href="#aModal" role="button" class="btn btn-warning" data-toggle="modal" data-target="#aModal">Confirm</a>*@
+        <input type="button" value="Confirm" id="btnConfirm" onclick="OnSubmitClick()" class="btn btn-warning" />
+    </div>
+}
+
+<div id="loading">
+    <div id="loadingcontent">
+        <p id="loadingspinner">
+            <img src="~/Images/ajax-loader.gif" style="height:20px;width:20px" />
+            Processing Request... Please Wait...
+        </p>
+    </div>
+</div>
+
+
+
+
