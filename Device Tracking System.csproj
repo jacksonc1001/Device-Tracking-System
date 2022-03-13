@@ -181,6 +181,7 @@
     <Content Include="Images\ajax-loader.gif" />
     <Content Include="Images\DTS_Logo.jpg" />
     <Content Include="Images\user_icon_001.jpg" />
+    <Content Include="Files\User_Manual_DTS_01_10_00.pdf" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -244,7 +245,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Files\" />
     <Folder Include="Views\Base\" />
   </ItemGroup>
   <ItemGroup>

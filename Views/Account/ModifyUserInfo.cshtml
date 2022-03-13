@@ -57,13 +57,13 @@
                 );
             }
             else {
-                swal("ERROR", "Please select user to delete!", "Error");
+                swal("ERROR", "Please select user to delete!", "error");
             }
         });
     });
-    function OnSelectedIndexChanged(s, e) {
-        UpdateGridView.AutoFilterByColumn("RoleId", s.GetText());
-    }
+    //function OnSelectedIndexChanged(s, e) {
+    //    UpdateGridView.AutoFilterByColumn("RoleId", s.GetText());
+    //}
 </script>
 
 <div>

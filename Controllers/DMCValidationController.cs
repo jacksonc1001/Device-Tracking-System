@@ -542,7 +542,7 @@ namespace Device_Tracking_System.Controllers
                     //call lotInfoExt
                     var output = BusinessLogic.MESSQLDataAccess.GetLotInfo(lot);
                     //validate the data returned from getlotinfo
-                    if (output != null)
+                    if (output.Item1 == 0)
                     {
                         failedDeviceLotValidation.Operation = Convert.ToInt32(output.Item2);
 
