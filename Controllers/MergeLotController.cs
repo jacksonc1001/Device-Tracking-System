@@ -768,7 +768,7 @@ namespace Device_Tracking_System.Controllers
                                     if(string.IsNullOrEmpty(dbAuditResponse) == false)
                                     {
                                         //insert mother and child lot number into merge lot history
-                                            Alert("Successful Merge Lot at MES and DTS!", Notification.NotificationType.success, "Success");
+                                            Alert("Successful Merge Lot at MES and DIS!", Notification.NotificationType.success, "Success");
                                             Session.Remove("MergeMotherDeviceInfo");
                                             Session.Remove("MergeChildDeviceInfo");
                                             Session.Remove("MergeChildDeviceInfo2");
@@ -796,9 +796,9 @@ namespace Device_Tracking_System.Controllers
                                 }
                                 else
                                 {
-                                        Alert("DTS Merge Devices: " + mergeDevice.Item2 + " Please contact Process Tech/Engineer!",
+                                        Alert("DIS Merge Devices: " + mergeDevice.Item2 + " Please contact Process Tech/Engineer!",
                                             Notification.NotificationType.error, "Error");
-                                        BusinessLogic.Log.WriteToErrorLogFile("DTS Merge Devices: " + mergeDevice.Item2 +
+                                        BusinessLogic.Log.WriteToErrorLogFile("DIS Merge Devices: " + mergeDevice.Item2 +
                                             " Please contact Process Tech/Engineer!");
                                         return RedirectToAction("MergeLotValidate");
                                 }

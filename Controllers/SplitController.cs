@@ -280,7 +280,7 @@ namespace Device_Tracking_System.Controllers
                                             if (string.IsNullOrEmpty(dbAuditResponse) == false)
                                             {
 
-                                                Alert("Successful Split Lot at MES and DTS! Mother Lot: " + sLotNum + " Child Lot: " +
+                                                Alert("Successful Split Lot at MES and DIS! Mother Lot: " + sLotNum + " Child Lot: " +
                                                     cLotNum, Notification.NotificationType.success, "Success");
                                                 //clear session data in this module
                                                 Session.Remove("SplitDeviceInfo");

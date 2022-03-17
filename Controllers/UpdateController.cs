@@ -258,7 +258,7 @@ namespace Device_Tracking_System.Controllers
 
                                     if (string.IsNullOrEmpty(dbAuditResponse) == false)
                                     {
-                                        Alert("Successful Update Devices Info to DTS!", Notification.NotificationType.success, "Success");
+                                        Alert("Successful Update Devices Info to DIS!", Notification.NotificationType.success, "Success");
                                         //clear the session data in this module
                                         Session.Remove("UpdateDeviceInfo");
                                         Session.Remove("UpdateLotInfo");
@@ -281,8 +281,8 @@ namespace Device_Tracking_System.Controllers
                             }
                             else
                             {
-                                Alert("Failed to update Device Info to DTS! Please try again later!", Notification.NotificationType.error, "Error");
-                                BusinessLogic.Log.WriteToErrorLogFile("Failed to update Device Info to DTS! Please try again later!");
+                                Alert("Failed to update Device Info to DIS! Please try again later!", Notification.NotificationType.error, "Error");
+                                BusinessLogic.Log.WriteToErrorLogFile("Failed to update Device Info to DIS! Please try again later!");
                                 return RedirectToAction("UpdateGridView");
                             }
                         }
@@ -377,7 +377,7 @@ namespace Device_Tracking_System.Controllers
 
                                             if (string.IsNullOrEmpty(dbAuditResponse) == false)
                                             {
-                                                Alert("Successful Batch Update Devices Info to DTS!", Notification.NotificationType.success, "Success");
+                                                Alert("Successful Batch Update Devices Info to DIS!", Notification.NotificationType.success, "Success");
                                                 //clear the session data in this module
                                                 Session.Remove("UpdateDeviceInfo");
                                                 Session.Remove("UpdateLotInfo");
