@@ -1,0 +1,1211 @@
+USE [master]
+GO
+/****** Object:  Database [DISDB]    Script Date: 3/18/2022 1:09:33 AM ******/
+CREATE DATABASE [DISDB]
+ CONTAINMENT = NONE
+ ON  PRIMARY 
+( NAME = N'DISDB', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL15.SQLEXPRESS\MSSQL\DATA\DISDB.mdf' , SIZE = 8192KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
+ LOG ON 
+( NAME = N'DISDB_log', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL15.SQLEXPRESS\MSSQL\DATA\DISDB_log.ldf' , SIZE = 8192KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
+ WITH CATALOG_COLLATION = DATABASE_DEFAULT
+GO
+ALTER DATABASE [DISDB] SET COMPATIBILITY_LEVEL = 150
+GO
+IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
+begin
+EXEC [DISDB].[dbo].[sp_fulltext_database] @action = 'enable'
+end
+GO
+ALTER DATABASE [DISDB] SET ANSI_NULL_DEFAULT OFF 
+GO
+ALTER DATABASE [DISDB] SET ANSI_NULLS OFF 
+GO
+ALTER DATABASE [DISDB] SET ANSI_PADDING OFF 
+GO
+ALTER DATABASE [DISDB] SET ANSI_WARNINGS OFF 
+GO
+ALTER DATABASE [DISDB] SET ARITHABORT OFF 
+GO
+ALTER DATABASE [DISDB] SET AUTO_CLOSE OFF 
+GO
+ALTER DATABASE [DISDB] SET AUTO_SHRINK OFF 
+GO
+ALTER DATABASE [DISDB] SET AUTO_UPDATE_STATISTICS ON 
+GO
+ALTER DATABASE [DISDB] SET CURSOR_CLOSE_ON_COMMIT OFF 
+GO
+ALTER DATABASE [DISDB] SET CURSOR_DEFAULT  GLOBAL 
+GO
+ALTER DATABASE [DISDB] SET CONCAT_NULL_YIELDS_NULL OFF 
+GO
+ALTER DATABASE [DISDB] SET NUMERIC_ROUNDABORT OFF 
+GO
+ALTER DATABASE [DISDB] SET QUOTED_IDENTIFIER OFF 
+GO
+ALTER DATABASE [DISDB] SET RECURSIVE_TRIGGERS OFF 
+GO
+ALTER DATABASE [DISDB] SET  DISABLE_BROKER 
+GO
+ALTER DATABASE [DISDB] SET AUTO_UPDATE_STATISTICS_ASYNC OFF 
+GO
+ALTER DATABASE [DISDB] SET DATE_CORRELATION_OPTIMIZATION OFF 
+GO
+ALTER DATABASE [DISDB] SET TRUSTWORTHY OFF 
+GO
+ALTER DATABASE [DISDB] SET ALLOW_SNAPSHOT_ISOLATION OFF 
+GO
+ALTER DATABASE [DISDB] SET PARAMETERIZATION SIMPLE 
+GO
+ALTER DATABASE [DISDB] SET READ_COMMITTED_SNAPSHOT OFF 
+GO
+ALTER DATABASE [DISDB] SET HONOR_BROKER_PRIORITY OFF 
+GO
+ALTER DATABASE [DISDB] SET RECOVERY SIMPLE 
+GO
+ALTER DATABASE [DISDB] SET  MULTI_USER 
+GO
+ALTER DATABASE [DISDB] SET PAGE_VERIFY CHECKSUM  
+GO
+ALTER DATABASE [DISDB] SET DB_CHAINING OFF 
+GO
+ALTER DATABASE [DISDB] SET FILESTREAM( NON_TRANSACTED_ACCESS = OFF ) 
+GO
+ALTER DATABASE [DISDB] SET TARGET_RECOVERY_TIME = 60 SECONDS 
+GO
+ALTER DATABASE [DISDB] SET DELAYED_DURABILITY = DISABLED 
+GO
+ALTER DATABASE [DISDB] SET QUERY_STORE = OFF
+GO
+/* For security reasons the login is created disabled and with a random password. */
+/****** Object:  Login [user_dts]    Script Date: 3/18/2022 1:09:34 AM ******/
+CREATE LOGIN [user_dts] WITH PASSWORD=N'2TRApsxGcWlotmGfF53bejb2P+qa119AVWcSb6tdwUk=', DEFAULT_DATABASE=[master], DEFAULT_LANGUAGE=[us_english], CHECK_EXPIRATION=OFF, CHECK_POLICY=OFF
+GO
+ALTER LOGIN [user_dts] DISABLE
+GO
+/****** Object:  Login [NT SERVICE\Winmgmt]    Script Date: 3/18/2022 1:09:34 AM ******/
+CREATE LOGIN [NT SERVICE\Winmgmt] FROM WINDOWS WITH DEFAULT_DATABASE=[master], DEFAULT_LANGUAGE=[us_english]
+GO
+/****** Object:  Login [NT SERVICE\SQLWriter]    Script Date: 3/18/2022 1:09:34 AM ******/
+CREATE LOGIN [NT SERVICE\SQLWriter] FROM WINDOWS WITH DEFAULT_DATABASE=[master], DEFAULT_LANGUAGE=[us_english]
+GO
+/****** Object:  Login [NT SERVICE\SQLTELEMETRY$SQLEXPRESS]    Script Date: 3/18/2022 1:09:34 AM ******/
+CREATE LOGIN [NT SERVICE\SQLTELEMETRY$SQLEXPRESS] FROM WINDOWS WITH DEFAULT_DATABASE=[master], DEFAULT_LANGUAGE=[us_english]
+GO
+/****** Object:  Login [NT Service\MSSQL$SQLEXPRESS]    Script Date: 3/18/2022 1:09:34 AM ******/
+CREATE LOGIN [NT Service\MSSQL$SQLEXPRESS] FROM WINDOWS WITH DEFAULT_DATABASE=[master], DEFAULT_LANGUAGE=[us_english]
+GO
+/****** Object:  Login [NT AUTHORITY\SYSTEM]    Script Date: 3/18/2022 1:09:34 AM ******/
+CREATE LOGIN [NT AUTHORITY\SYSTEM] FROM WINDOWS WITH DEFAULT_DATABASE=[master], DEFAULT_LANGUAGE=[us_english]
+GO
+/****** Object:  Login [LIGHT\adminpen.jacks]    Script Date: 3/18/2022 1:09:34 AM ******/
+CREATE LOGIN [LIGHT\adminpen.jacks] FROM WINDOWS WITH DEFAULT_DATABASE=[master], DEFAULT_LANGUAGE=[us_english]
+GO
+/****** Object:  Login [BUILTIN\Users]    Script Date: 3/18/2022 1:09:34 AM ******/
+CREATE LOGIN [BUILTIN\Users] FROM WINDOWS WITH DEFAULT_DATABASE=[master], DEFAULT_LANGUAGE=[us_english]
+GO
+/* For security reasons the login is created disabled and with a random password. */
+/****** Object:  Login [##MS_PolicyTsqlExecutionLogin##]    Script Date: 3/18/2022 1:09:34 AM ******/
+CREATE LOGIN [##MS_PolicyTsqlExecutionLogin##] WITH PASSWORD=N'yHBF0XmENSSkf1jZ0GyhVs+19O7WpnFOw356wDQ1H+4=', DEFAULT_DATABASE=[master], DEFAULT_LANGUAGE=[us_english], CHECK_EXPIRATION=OFF, CHECK_POLICY=ON
+GO
+ALTER LOGIN [##MS_PolicyTsqlExecutionLogin##] DISABLE
+GO
+/* For security reasons the login is created disabled and with a random password. */
+/****** Object:  Login [##MS_PolicyEventProcessingLogin##]    Script Date: 3/18/2022 1:09:34 AM ******/
+CREATE LOGIN [##MS_PolicyEventProcessingLogin##] WITH PASSWORD=N'Ufh4WAXU2OUXEQb+rXtogOyo9EfwCvUVMg19xEUbL9s=', DEFAULT_DATABASE=[master], DEFAULT_LANGUAGE=[us_english], CHECK_EXPIRATION=OFF, CHECK_POLICY=ON
+GO
+ALTER LOGIN [##MS_PolicyEventProcessingLogin##] DISABLE
+GO
+ALTER SERVER ROLE [sysadmin] ADD MEMBER [user_dts]
+GO
+ALTER SERVER ROLE [sysadmin] ADD MEMBER [NT SERVICE\Winmgmt]
+GO
+ALTER SERVER ROLE [sysadmin] ADD MEMBER [NT SERVICE\SQLWriter]
+GO
+ALTER SERVER ROLE [sysadmin] ADD MEMBER [NT Service\MSSQL$SQLEXPRESS]
+GO
+ALTER SERVER ROLE [sysadmin] ADD MEMBER [LIGHT\adminpen.jacks]
+GO
+USE [DISDB]
+GO
+/****** Object:  User [user_dts]    Script Date: 3/18/2022 1:09:34 AM ******/
+CREATE USER [user_dts] FOR LOGIN [user_dts] WITH DEFAULT_SCHEMA=[dbo]
+GO
+GRANT VIEW ANY COLUMN ENCRYPTION KEY DEFINITION TO [public] AS [dbo]
+GO
+GRANT VIEW ANY COLUMN MASTER KEY DEFINITION TO [public] AS [dbo]
+GO
+GRANT CONNECT TO [user_dts] AS [dbo]
+GO
+/****** Object:  UserDefinedTableType [dbo].[DIS_DeviceInformationList]    Script Date: 3/18/2022 1:09:34 AM ******/
+CREATE TYPE [dbo].[DIS_DeviceInformationList] AS TABLE(
+	[DeviceId] [varchar](250) NULL,
+	[AliasId] [varchar](250) NULL,
+	[SourceSubstrateId] [varchar](250) NULL,
+	[TargetSubstrateId] [varchar](250) NULL,
+	[SourcePositionId] [varchar](250) NULL,
+	[TargetPositionId] [varchar](250) NULL,
+	[FromX] [varchar](250) NULL,
+	[FromY] [varchar](250) NULL,
+	[ToX] [varchar](250) NULL,
+	[ToY] [varchar](250) NULL,
+	[Result] [varchar](250) NULL,
+	[BinCode] [varchar](250) NULL,
+	[BinDesc] [varchar](250) NULL
+)
+GO
+/****** Object:  Table [dbo].[DIS_DeviceInformation]    Script Date: 3/18/2022 1:09:34 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[DIS_DeviceInformation](
+	[Id] [bigint] IDENTITY(1,1) NOT NULL,
+	[DeviceId] [varchar](50) NOT NULL,
+	[AliasId] [varchar](250) NULL,
+	[SourceSubstrateId] [varchar](250) NULL,
+	[TargetSubstrateId] [varchar](250) NULL,
+	[SourcePositionId] [varchar](50) NULL,
+	[TargetPositionId] [varchar](50) NULL,
+	[FromX] [varchar](50) NULL,
+	[FromY] [varchar](50) NULL,
+	[ToX] [varchar](50) NULL,
+	[ToY] [varchar](50) NULL,
+	[Result] [varchar](50) NULL,
+	[BinDesc] [varchar](250) NOT NULL,
+	[BinCode] [varchar](50) NULL,
+	[SAPBarcode] [varchar](250) NULL,
+	[Pick] [bit] NULL,
+	[Active] [bit] NULL,
+	[LotId] [bigint] NOT NULL,
+	[OpId] [bigint] NOT NULL,
+	[InsertDateTime] [datetime] NOT NULL,
+	[EqpId] [bigint] NOT NULL,
+ CONSTRAINT [PK_DID_DeviceInformation] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[DIS_Equipment]    Script Date: 3/18/2022 1:09:34 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[DIS_Equipment](
+	[EqpId] [bigint] IDENTITY(1,1) NOT NULL,
+	[EquipmentName] [varchar](250) NOT NULL,
+ CONSTRAINT [PK_DIS_Equipment] PRIMARY KEY CLUSTERED 
+(
+	[EqpId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[DIS_Lot]    Script Date: 3/18/2022 1:09:34 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[DIS_Lot](
+	[LotId] [bigint] IDENTITY(1,1) NOT NULL,
+	[LotNumber] [varchar](250) NOT NULL,
+ CONSTRAINT [PK_DIS_Lot] PRIMARY KEY CLUSTERED 
+(
+	[LotId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET IDENTITY_INSERT [dbo].[DIS_DeviceInformation] ON 
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (1, N'DTSTEST01', NULL, NULL, N'FOIL01', NULL, N'1', NULL, NULL, N'1', N'0', N'PASS', N'GOOD', N'1', NULL, 1, 0, 2, 2, CAST(N'2022-03-07T00:00:00.000' AS DateTime), 2)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (2, N'DTSTEST02', NULL, NULL, N'FOIL01', NULL, N'2', NULL, NULL, N'2', N'0', N'PASS', N'GOOD', N'1', NULL, 1, 0, 2, 2, CAST(N'2022-03-07T00:00:00.000' AS DateTime), 2)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (3, N'DTSTEST03', NULL, NULL, N'FOIL01', NULL, N'3', NULL, NULL, N'3', N'0', N'PASS', N'GOOD', N'1', NULL, 1, 0, 2, 2, CAST(N'2022-03-07T00:00:00.000' AS DateTime), 2)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (4, N'DTSTEST04', NULL, NULL, N'FOIL01', NULL, N'4', NULL, NULL, N'4', N'0', N'PASS', N'GOOD', N'1', NULL, 1, 0, 2, 2, CAST(N'2022-03-07T00:00:00.000' AS DateTime), 2)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (5, N'DTSTEST05', NULL, NULL, N'FOIL01', NULL, N'5', NULL, NULL, N'5', N'0', N'FAIL', N'TESTFAILED', N'5000', NULL, 0, 0, 2, 2, CAST(N'2022-03-07T00:00:00.000' AS DateTime), 2)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (6, N'DTSTEST06', NULL, NULL, N'FOIL02', NULL, N'1', NULL, NULL, N'1', N'0', N'PASS', N'GOOD', N'1', NULL, 1, 1, 3, 8, CAST(N'2022-03-07T00:00:00.000' AS DateTime), 1)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (7, N'DTSTEST07', NULL, NULL, N'FOIL02', NULL, N'2', NULL, NULL, N'2', N'0', N'PASS', N'GOOD', N'1', NULL, 1, 1, 3, 8, CAST(N'2022-03-07T00:00:00.000' AS DateTime), 1)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (8, N'DTSTEST08', NULL, NULL, N'FOIL02', NULL, N'3', NULL, NULL, N'3', N'0', N'PASS', N'GOOD', N'1', NULL, 1, 1, 3, 8, CAST(N'2022-03-07T00:00:00.000' AS DateTime), 1)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (9, N'DTSTEST09', NULL, NULL, N'FOIL02', NULL, N'4', NULL, NULL, N'4', N'0', N'PREV FAIL', N'FAILGLT', N'5010', NULL, 0, 1, 3, 8, CAST(N'2022-03-07T00:00:00.000' AS DateTime), 1)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (10, N'DTSTEST10', NULL, NULL, N'FOIL02', NULL, N'5', NULL, NULL, N'5', N'0', N'FAIL', N'FAILVISION', N'5001', NULL, 0, 1, 3, 8, CAST(N'2022-03-07T00:00:00.000' AS DateTime), 1)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (11, N'DTSTEST01', NULL, NULL, N'FOIL01', NULL, N'1', NULL, NULL, N'1', N'0', N'PASS', N'GOOD', N'1', NULL, 1, 0, 2, 1, CAST(N'2022-03-07T00:00:00.000' AS DateTime), 4)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (12, N'DTSTEST02', NULL, NULL, N'FOIL01', NULL, N'2', NULL, NULL, N'2', N'0', N'PASS', N'GOOD', N'1', NULL, 1, 0, 2, 1, CAST(N'2022-03-07T00:00:00.000' AS DateTime), 4)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (13, N'DTSTEST03', NULL, NULL, N'FOIL01', NULL, N'3', NULL, NULL, N'3', N'0', N'PASS', N'GOOD', N'1', NULL, 1, 0, 2, 1, CAST(N'2022-03-07T00:00:00.000' AS DateTime), 4)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (14, N'DTSTEST04', NULL, NULL, N'FOIL01', NULL, N'4', NULL, NULL, N'4', N'0', N'PASS', N'GOOD', N'1', NULL, 1, 0, 2, 1, CAST(N'2022-03-07T00:00:00.000' AS DateTime), 4)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (15, N'DTSTEST05', NULL, NULL, N'FOIL01', NULL, N'5', NULL, NULL, N'5', N'0', N'FAIL', N'TESTFAILED', N'5000', NULL, 0, 0, 2, 1, CAST(N'2022-03-07T00:00:00.000' AS DateTime), 4)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (18, N'DTSTEST01', N'DTSTEST01', N'FOIL01', N'FOIL02', N'1', N'1', N'1', N'0', N'1', N'1', N'FAIL', N'A-ERRMK_ERROR MARK OF MANUFACTU', N'3', N'', 0, 0, 2, 2, CAST(N'2022-03-07T12:29:50.793' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (19, N'DTSTEST02', N'DTSTEST02', N'FOIL01', N'FOIL02', N'1', N'2', N'2', N'0', N'2', N'1', N'PASS', N'TESTED OK', N'2', N'', 0, 0, 2, 3, CAST(N'2022-03-07T12:31:47.350' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (35, N'DTSTEST01', N'DTSTEST01', N'FOIL01', N'FOIL02', N'1', N'1', N'1', N'0', N'1', N'1', N'PASS', N'TESTED OK', N'1', N'', 1, 0, 2, 2, CAST(N'2022-03-07T13:00:47.883' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (36, N'DTSTEST02', N'DTSTEST02', N'FOIL01', N'FOIL02', N'1', N'2', N'2', N'0', N'2', N'1', N'PASS', N'TESTED OK', N'1', N'', 1, 0, 2, 2, CAST(N'2022-03-07T13:00:47.883' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (37, N'DTSTEST03', N'DTSTEST03', N'FOIL01', N'FOIL02', N'1', N'3', N'3', N'0', N'3', N'1', N'PASS', N'TESTED OK', N'1', N'', 1, 0, 2, 2, CAST(N'2022-03-07T13:00:47.883' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (38, N'DTSTEST04', N'DTSTEST04', N'FOIL01', N'FOIL03', N'1', N'1', N'4', N'0', N'1', N'1', N'FAIL', N'FAILFLT', N'3', N'', 0, 0, 11, 2, CAST(N'2022-03-07T13:00:47.883' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (39, N'DTSTEST05', N'DTSTEST05', N'FOIL01', N'FOIL03', N'1', N'2', N'5', N'0', N'2', N'1', N'FAIL', N'FAILFLT', N'3', N'', 0, 0, 11, 2, CAST(N'2022-03-07T13:00:47.883' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (40, N'DTSTEST01', N'DTSTEST01', N'FOIL01', N'FOIL02', N'1', N'1', N'1', N'0', N'1', N'1', N'PASS', N'TESTED OK', N'1', N'', 1, 0, 2, 2, CAST(N'2022-03-07T14:10:12.380' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (41, N'DTSTEST02', N'DTSTEST02', N'FOIL01', N'FOIL02', N'1', N'2', N'2', N'0', N'2', N'1', N'PASS', N'TESTED OK', N'1', N'', 1, 0, 2, 2, CAST(N'2022-03-07T14:10:12.380' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (42, N'DTSTEST03', N'DTSTEST03', N'FOIL01', N'FOIL02', N'1', N'3', N'3', N'0', N'3', N'1', N'PASS', N'TESTED OK', N'1', N'', 1, 0, 2, 2, CAST(N'2022-03-07T14:10:12.380' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (43, N'DTSTEST04', N'DTSTEST04', N'FOIL01', N'FOIL03', N'1', N'1', N'4', N'0', N'1', N'1', N'FAIL', N'FAILFLT', N'3', N'', 0, 0, 2, 2, CAST(N'2022-03-07T14:10:12.380' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (44, N'DTSTEST05', N'DTSTEST05', N'FOIL01', N'FOIL03', N'1', N'2', N'5', N'0', N'2', N'1', N'FAIL', N'FAILFLT', N'3', N'', 0, 0, 2, 2, CAST(N'2022-03-07T14:10:12.380' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (45, N'DTSTEST01', N'DTSTEST01', N'', N'FOIL02', N'', N'1', N'', N'', N'1', N'1', N'FAIL', N'TESTED OK', N'1', N'', 0, 0, 2, 2, CAST(N'2022-03-11T14:48:59.027' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (46, N'DTSTEST02', N'DTSTEST02', N'', N'FOIL02', N'', N'2', N'', N'', N'2', N'1', N'PASS', N'TESTED OK', N'1', N'', 1, 0, 2, 2, CAST(N'2022-03-11T14:48:59.027' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (47, N'DTSTEST03', N'DTSTEST03', N'', N'FOIL02', N'', N'3', N'', N'', N'3', N'1', N'PASS', N'TESTED OK', N'1', N'', 1, 0, 2, 2, CAST(N'2022-03-11T14:48:59.027' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (48, N'DTSTEST04', N'DTSTEST04', N'', N'FOIL03', N'', N'1', N'', N'', N'1', N'1', N'FAIL', N'FAILFLT', N'3', N'', 0, 0, 2, 2, CAST(N'2022-03-11T14:48:59.027' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (49, N'DTSTEST05', N'DTSTEST05', N'', N'FOIL03', N'', N'2', N'', N'', N'2', N'1', N'FAIL', N'FAILFLT', N'3', N'', 0, 0, 2, 2, CAST(N'2022-03-11T14:48:59.027' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (50, N'DTSTEST01', N'DTSTEST01', N'', N'FOIL02', N'', N'1', N'', N'', N'1', N'1', N'PASS', N'TESTED OK', N'1', N'', 1, 0, 2, 2, CAST(N'2022-03-11T15:05:11.113' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (51, N'DTSTEST02', N'DTSTEST02', N'', N'FOIL02', N'', N'2', N'', N'', N'2', N'1', N'PASS', N'TESTED OK', N'1', N'', 1, 0, 2, 2, CAST(N'2022-03-11T15:05:11.113' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (52, N'DTSTEST03', N'DTSTEST03', N'', N'FOIL02', N'', N'3', N'', N'', N'3', N'1', N'PASS', N'TESTED OK', N'1', N'', 1, 0, 2, 2, CAST(N'2022-03-11T15:05:11.113' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (53, N'DTSTEST04', N'DTSTEST04', N'', N'FOIL03', N'', N'1', N'', N'', N'1', N'1', N'FAIL', N'FAILFLT', N'3', N'', 0, 0, 2, 2, CAST(N'2022-03-11T15:05:11.113' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (54, N'DTSTEST05', N'DTSTEST05', N'', N'FOIL03', N'', N'2', N'', N'', N'2', N'1', N'FAIL', N'FAILFLT', N'3', N'', 0, 0, 2, 2, CAST(N'2022-03-11T15:05:11.113' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (55, N'DTSTEST01', N'DTSTEST01', N'', N'FOIL02', N'', N'1', N'', N'', N'1', N'1', N'PASS', N'TESTED OK', N'9', N'', 1, 0, 2, 2, CAST(N'2022-03-11T15:05:27.793' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (56, N'DTSTEST02', N'DTSTEST02', N'', N'FOIL02', N'', N'2', N'', N'', N'2', N'1', N'PASS', N'TESTED OK', N'1', N'', 1, 0, 2, 2, CAST(N'2022-03-11T15:05:27.793' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (57, N'DTSTEST03', N'DTSTEST03', N'', N'FOIL02', N'', N'3', N'', N'', N'3', N'1', N'PASS', N'TESTED OK', N'1', N'', 1, 0, 2, 2, CAST(N'2022-03-11T15:05:27.793' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (58, N'DTSTEST04', N'DTSTEST04', N'', N'FOIL03', N'', N'1', N'', N'', N'1', N'1', N'FAIL', N'FAILFLT', N'3', N'', 0, 0, 2, 2, CAST(N'2022-03-11T15:05:27.793' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (59, N'DTSTEST05', N'DTSTEST05', N'', N'FOIL03', N'', N'2', N'', N'', N'2', N'1', N'FAIL', N'FAILFLT', N'3', N'', 0, 0, 2, 2, CAST(N'2022-03-11T15:05:27.793' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (60, N'DTSTEST01', N'DTSTEST01', N'', N'FOIL02', N'', N'1', N'', N'', N'1', N'1', N'FAIL', N'FAILTESTING', N'10', N'', 0, 0, 2, 2, CAST(N'2022-03-11T15:06:12.333' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (61, N'DTSTEST02', N'DTSTEST02', N'', N'FOIL02', N'', N'2', N'', N'', N'2', N'1', N'FAIL', N'FAILTESTING', N'10', N'', 0, 0, 2, 2, CAST(N'2022-03-11T15:06:12.333' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (62, N'DTSTEST03', N'DTSTEST03', N'', N'FOIL02', N'', N'3', N'', N'', N'3', N'1', N'PASS', N'TESTED OK', N'1', N'', 1, 0, 2, 2, CAST(N'2022-03-11T15:06:12.333' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (63, N'DTSTEST04', N'DTSTEST04', N'', N'FOIL03', N'', N'1', N'', N'', N'1', N'1', N'FAIL', N'FAILFLT', N'3', N'', 0, 0, 2, 2, CAST(N'2022-03-11T15:06:12.333' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (64, N'DTSTEST05', N'DTSTEST05', N'', N'FOIL03', N'', N'2', N'', N'', N'2', N'1', N'FAIL', N'FAILFLT', N'3', N'', 0, 0, 2, 2, CAST(N'2022-03-11T15:06:12.333' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (65, N'DTSTEST01', N'DTSTEST01', N'', N'FOIL02', N'', N'1', N'', N'', N'1', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-11T15:08:08.197' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (66, N'DTSTEST02', N'DTSTEST02', N'', N'FOIL02', N'', N'2', N'', N'', N'2', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-11T15:08:08.197' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (67, N'DTSTEST03', N'DTSTEST03', N'', N'FOIL02', N'', N'3', N'', N'', N'3', N'1', N'PASS', N'TESTED OK', N'1', N'', 1, 0, 2, 2, CAST(N'2022-03-11T15:08:08.197' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (68, N'DTSTEST04', N'DTSTEST04', N'', N'FOIL03', N'', N'1', N'', N'', N'1', N'1', N'FAIL', N'FAILFLT', N'3', N'', 0, 0, 2, 2, CAST(N'2022-03-11T15:08:08.197' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (69, N'DTSTEST05', N'DTSTEST05', N'', N'FOIL03', N'', N'2', N'', N'', N'2', N'1', N'FAIL', N'FAILFLT', N'3', N'', 0, 0, 2, 2, CAST(N'2022-03-11T15:08:08.197' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (70, N'DTSTEST04', N'DTSTEST04', N'', N'FOIL03', N'', N'1', N'', N'', N'1', N'1', N'FAIL', N'FAILFLT', N'3', N'', 0, 0, 2, 2, CAST(N'2022-03-11T15:13:23.470' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (71, N'DTSTEST05', N'DTSTEST05', N'', N'FOIL03', N'', N'2', N'', N'', N'2', N'1', N'FAIL', N'FAILFLT', N'3', N'', 0, 0, 2, 2, CAST(N'2022-03-11T15:13:23.470' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (72, N'DTSTEST01', N'DTSTEST01', N'', N'FOIL02', N'', N'1', N'', N'', N'1', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 11, 2, CAST(N'2022-03-11T15:13:23.470' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (73, N'DTSTEST02', N'DTSTEST02', N'', N'FOIL02', N'', N'2', N'', N'', N'2', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 11, 2, CAST(N'2022-03-11T15:13:23.470' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (74, N'DTSTEST03', N'DTSTEST03', N'', N'FOIL02', N'', N'3', N'', N'', N'3', N'1', N'PASS', N'TESTED OK', N'1', N'', 1, 0, 11, 2, CAST(N'2022-03-11T15:13:23.470' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (75, N'DTSTEST04', N'DTSTEST04', N'', N'FOIL03', N'', N'1', N'', N'', N'1', N'1', N'FAIL', N'FAILFLT', N'3', N'', 0, 0, 2, 2, CAST(N'2022-03-11T15:21:56.647' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (76, N'DTSTEST05', N'DTSTEST05', N'', N'FOIL03', N'', N'2', N'', N'', N'2', N'1', N'FAIL', N'FAILFLT', N'3', N'', 0, 0, 2, 2, CAST(N'2022-03-11T15:21:56.647' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (77, N'DTSTEST01', N'DTSTEST01', N'', N'FOIL02', N'', N'1', N'', N'', N'1', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-11T15:21:56.647' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (78, N'DTSTEST02', N'DTSTEST02', N'', N'FOIL02', N'', N'2', N'', N'', N'2', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-11T15:21:56.647' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (79, N'DTSTEST03', N'DTSTEST03', N'', N'FOIL02', N'', N'3', N'', N'', N'3', N'1', N'PASS', N'TESTED OK', N'1', N'', 1, 0, 2, 2, CAST(N'2022-03-11T15:21:56.647' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (80, N'DTSTEST02', N'DTSTEST02', N'', N'FOIL02', N'', N'2', N'', N'', N'2', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-11T15:38:23.727' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (81, N'DTSTEST03', N'DTSTEST03', N'', N'FOIL02', N'', N'3', N'', N'', N'3', N'1', N'PASS', N'TESTED OK', N'1', N'', 1, 0, 2, 2, CAST(N'2022-03-11T15:38:23.727' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (82, N'DTSTEST05', N'DTSTEST05', N'', N'FOIL03', N'', N'2', N'', N'', N'2', N'1', N'FAIL', N'FAILFLT', N'3', N'', 0, 0, 2, 2, CAST(N'2022-03-11T15:38:23.727' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (83, N'DTSTEST01', N'DTSTEST01', N'', N'FOIL02', N'', N'1', N'', N'', N'1', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 12, 2, CAST(N'2022-03-11T15:38:23.727' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (84, N'DTSTEST04', N'DTSTEST04', N'', N'FOIL03', N'', N'1', N'', N'', N'1', N'1', N'FAIL', N'FAILFLT', N'3', N'', 0, 0, 12, 2, CAST(N'2022-03-11T15:38:23.727' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (85, N'DTSTEST02', N'DTSTEST02', N'', N'FOIL02', N'', N'2', N'', N'', N'2', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-11T15:39:42.090' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (86, N'DTSTEST03', N'DTSTEST03', N'', N'FOIL02', N'', N'3', N'', N'', N'3', N'1', N'PASS', N'TESTED OK', N'1', N'', 1, 0, 2, 2, CAST(N'2022-03-11T15:39:42.090' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (87, N'DTSTEST05', N'DTSTEST05', N'', N'FOIL03', N'', N'2', N'', N'', N'2', N'1', N'FAIL', N'FAILFLT', N'3', N'', 0, 0, 2, 2, CAST(N'2022-03-11T15:39:42.090' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (88, N'DTSTEST01', N'DTSTEST01', N'', N'FOIL02', N'', N'1', N'', N'', N'1', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-11T15:39:42.090' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (89, N'DTSTEST04', N'DTSTEST04', N'', N'FOIL03', N'', N'1', N'', N'', N'1', N'1', N'FAIL', N'FAILFLT', N'3', N'', 0, 0, 2, 2, CAST(N'2022-03-11T15:39:42.090' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (90, N'DTSTEST02', N'DTSTEST02', N'', N'FOIL02', N'', N'2', N'', N'', N'2', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-11T15:39:52.663' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (91, N'DTSTEST03', N'DTSTEST03', N'', N'FOIL02', N'', N'3', N'', N'', N'3', N'1', N'PASS', N'TESTED OK', N'1', N'', 1, 0, 2, 2, CAST(N'2022-03-11T15:39:52.663' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (92, N'DTSTEST05', N'DTSTEST05', N'', N'FOIL03', N'', N'2', N'', N'', N'2', N'1', N'FAIL', N'FAILFLT', N'3', N'', 0, 0, 2, 2, CAST(N'2022-03-11T15:39:52.663' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (93, N'DTSTEST01', N'DTSTEST01', N'', N'FOIL02', N'', N'1', N'', N'', N'1', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 13, 2, CAST(N'2022-03-11T15:39:52.663' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (94, N'DTSTEST04', N'DTSTEST04', N'', N'FOIL03', N'', N'1', N'', N'', N'1', N'1', N'FAIL', N'FAILFLT', N'3', N'', 0, 0, 13, 2, CAST(N'2022-03-11T15:39:52.663' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (95, N'DTSTEST02', N'DTSTEST02', N'', N'FOIL02', N'', N'2', N'', N'', N'2', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-11T15:40:42.030' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (96, N'DTSTEST03', N'DTSTEST03', N'', N'FOIL02', N'', N'3', N'', N'', N'3', N'1', N'PASS', N'TESTED OK', N'1', N'', 1, 0, 2, 2, CAST(N'2022-03-11T15:40:42.030' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (97, N'DTSTEST05', N'DTSTEST05', N'', N'FOIL03', N'', N'2', N'', N'', N'2', N'1', N'FAIL', N'FAILFLT', N'3', N'', 0, 0, 2, 2, CAST(N'2022-03-11T15:40:42.030' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (98, N'DTSTEST01', N'DTSTEST01', N'', N'FOIL02', N'', N'1', N'', N'', N'1', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-11T15:40:42.030' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (99, N'DTSTEST04', N'DTSTEST04', N'', N'FOIL03', N'', N'1', N'', N'', N'1', N'1', N'FAIL', N'FAILFLT', N'3', N'', 0, 0, 2, 2, CAST(N'2022-03-11T15:40:42.030' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (101, N'DTSTEST11', N'DTSTEST11', NULL, N'FOIL03', NULL, N'3', NULL, NULL, N'3', N'1', N'PASS', N'GOOD', N'2', NULL, 1, 0, 2, 2, CAST(N'2022-03-11T15:40:42.030' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (102, N'DTSTEST12', N'DTSTEST12', NULL, N'FOIL03', NULL, N'4', NULL, NULL, N'4', N'1', N'PASS', N'GOOD', N'2', NULL, 1, 0, 2, 2, CAST(N'2022-03-11T15:40:42.030' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (104, N'DTSTEST13', N'DTSTEST13', NULL, N'FOIL03', NULL, N'5', NULL, NULL, N'5', N'1', N'PASS', N'GOOD', N'2', NULL, 1, 0, 2, 2, CAST(N'2022-03-11T15:40:42.030' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (105, N'DTSTEST14', N'DTSTEST14', NULL, N'FOIL03', NULL, N'6', NULL, NULL, N'6', N'1', N'PASS', N'GOOD', N'2', NULL, 1, 0, 2, 2, CAST(N'2022-03-11T15:40:42.030' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (106, N'DTSTEST15', N'DTSTEST15', NULL, N'FOIL03', NULL, N'7', NULL, NULL, N'7', N'1', N'PASS', N'GOOD', N'2', NULL, 1, 0, 2, 2, CAST(N'2022-03-11T15:40:42.030' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (107, N'DTSTEST16', N'DTSTEST16', NULL, N'FOIL03', NULL, N'8', NULL, NULL, N'8', N'1', N'FAIL', N'FAILFLT', N'2', NULL, 0, 0, 2, 2, CAST(N'2022-03-11T15:40:42.030' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (108, N'DTSTEST17', N'DTSTEST17', NULL, N'FOIL03', NULL, N'9', NULL, NULL, N'9', N'1', N'PASS', N'GOOD', N'2', NULL, 1, 0, 2, 2, CAST(N'2022-03-11T15:40:42.030' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (109, N'DTSTEST18', N'DTSTEST18', NULL, N'FOIL03', NULL, N'10', NULL, NULL, N'10', N'1', N'PASS', N'GOOD', N'2', NULL, 1, 0, 2, 2, CAST(N'2022-03-11T15:40:42.030' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (110, N'DTSTEST19', N'DTSTEST19', NULL, N'FOIL03', NULL, N'11', NULL, NULL, N'11', N'1', N'PASS', N'GOOD', N'2', NULL, 1, 0, 2, 2, CAST(N'2022-03-11T15:40:42.030' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (111, N'DTSTEST20', N'DTSTEST20', NULL, N'FOIL03', NULL, N'12', NULL, NULL, N'12', N'1', N'PASS', N'GOOD', N'2', NULL, 1, 0, 2, 2, CAST(N'2022-03-11T15:40:42.030' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (112, N'DTSTEST21', N'DTSTEST21', NULL, N'FOIL03', NULL, N'13', NULL, NULL, N'13', N'1', N'PASS', N'GOOD', N'2', NULL, 1, 0, 2, 2, CAST(N'2022-03-11T15:40:42.030' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (113, N'DTSTEST04', N'DTSTEST04', N'', N'FOIL03', N'', N'1', N'', N'', N'1', N'1', N'FAIL', N'FAILFLT', N'3', N'', 0, 0, 2, 2, CAST(N'2022-03-13T23:49:06.960' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (114, N'DTSTEST05', N'DTSTEST05', N'', N'FOIL03', N'', N'2', N'', N'', N'2', N'1', N'FAIL', N'FAILFLT', N'3', N'', 0, 0, 2, 2, CAST(N'2022-03-13T23:49:06.960' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (115, N'DTSTEST11', N'DTSTEST11', N'', N'FOIL03', N'', N'3', N'', N'', N'3', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-13T23:49:06.960' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (116, N'DTSTEST12', N'DTSTEST12', N'', N'FOIL03', N'', N'4', N'', N'', N'4', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-13T23:49:06.960' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (117, N'DTSTEST13', N'DTSTEST13', N'', N'FOIL03', N'', N'5', N'', N'', N'5', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-13T23:49:06.960' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (118, N'DTSTEST14', N'DTSTEST14', N'', N'FOIL03', N'', N'6', N'', N'', N'6', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-13T23:49:06.960' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (119, N'DTSTEST15', N'DTSTEST15', N'', N'FOIL03', N'', N'7', N'', N'', N'7', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-13T23:49:06.960' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (120, N'DTSTEST16', N'DTSTEST16', N'', N'FOIL03', N'', N'8', N'', N'', N'8', N'1', N'FAIL', N'FAILFLT', N'2', N'', 0, 0, 2, 2, CAST(N'2022-03-13T23:49:06.960' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (121, N'DTSTEST17', N'DTSTEST17', N'', N'FOIL03', N'', N'9', N'', N'', N'9', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-13T23:49:06.960' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (122, N'DTSTEST18', N'DTSTEST18', N'', N'FOIL03', N'', N'10', N'', N'', N'10', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-13T23:49:06.960' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (123, N'DTSTEST19', N'DTSTEST19', N'', N'FOIL03', N'', N'11', N'', N'', N'11', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-13T23:49:06.960' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (124, N'DTSTEST20', N'DTSTEST20', N'', N'FOIL03', N'', N'12', N'', N'', N'12', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-13T23:49:06.960' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (125, N'DTSTEST21', N'DTSTEST21', N'', N'FOIL03', N'', N'13', N'', N'', N'13', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-13T23:49:06.960' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (126, N'DTSTEST01', N'DTSTEST01', N'', N'FOIL02', N'', N'1', N'', N'', N'1', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 14, 2, CAST(N'2022-03-13T23:49:06.960' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (127, N'DTSTEST02', N'DTSTEST02', N'', N'FOIL02', N'', N'2', N'', N'', N'2', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 14, 2, CAST(N'2022-03-13T23:49:06.960' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (128, N'DTSTEST03', N'DTSTEST03', N'', N'FOIL02', N'', N'3', N'', N'', N'3', N'1', N'PASS', N'TESTED OK', N'1', N'', 1, 0, 14, 2, CAST(N'2022-03-13T23:49:06.960' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (129, N'DTSTEST22', N'DTSTEST22', N'', N'FOIL03', N'', N'14', N'', N'', N'14', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-13T23:49:06.960' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (130, N'DTSTEST23', N'DTSTEST23', N'', N'FOIL03', N'', N'15', N'', N'', N'15', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-13T23:49:06.960' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (131, N'DTSTEST24', N'DTSTEST24', N'', N'FOIL03', N'', N'16', N'', N'', N'16', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-13T23:49:06.960' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (132, N'DTSTEST04', N'DTSTEST04', N'', N'FOIL03', N'', N'1', N'', N'', N'1', N'1', N'FAIL', N'FAILFLT', N'3', N'', 0, 0, 2, 2, CAST(N'2022-03-14T00:13:16.980' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (133, N'DTSTEST05', N'DTSTEST05', N'', N'FOIL03', N'', N'2', N'', N'', N'2', N'1', N'FAIL', N'FAILFLT', N'3', N'', 0, 0, 2, 2, CAST(N'2022-03-14T00:13:16.980' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (134, N'DTSTEST11', N'DTSTEST11', N'', N'FOIL03', N'', N'3', N'', N'', N'3', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-14T00:13:16.980' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (135, N'DTSTEST12', N'DTSTEST12', N'', N'FOIL03', N'', N'4', N'', N'', N'4', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-14T00:13:16.980' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (136, N'DTSTEST13', N'DTSTEST13', N'', N'FOIL03', N'', N'5', N'', N'', N'5', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-14T00:13:16.980' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (137, N'DTSTEST14', N'DTSTEST14', N'', N'FOIL03', N'', N'6', N'', N'', N'6', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-14T00:13:16.980' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (138, N'DTSTEST15', N'DTSTEST15', N'', N'FOIL03', N'', N'7', N'', N'', N'7', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-14T00:13:16.980' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (139, N'DTSTEST16', N'DTSTEST16', N'', N'FOIL03', N'', N'8', N'', N'', N'8', N'1', N'FAIL', N'FAILFLT', N'2', N'', 0, 0, 2, 2, CAST(N'2022-03-14T00:13:16.980' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (140, N'DTSTEST17', N'DTSTEST17', N'', N'FOIL03', N'', N'9', N'', N'', N'9', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-14T00:13:16.980' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (141, N'DTSTEST18', N'DTSTEST18', N'', N'FOIL03', N'', N'10', N'', N'', N'10', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-14T00:13:16.980' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (142, N'DTSTEST19', N'DTSTEST19', N'', N'FOIL03', N'', N'11', N'', N'', N'11', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-14T00:13:16.980' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (143, N'DTSTEST20', N'DTSTEST20', N'', N'FOIL03', N'', N'12', N'', N'', N'12', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-14T00:13:16.980' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (144, N'DTSTEST21', N'DTSTEST21', N'', N'FOIL03', N'', N'13', N'', N'', N'13', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-14T00:13:16.980' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (145, N'DTSTEST01', N'DTSTEST01', N'', N'FOIL02', N'', N'1', N'', N'', N'1', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-14T00:13:16.980' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (146, N'DTSTEST02', N'DTSTEST02', N'', N'FOIL02', N'', N'2', N'', N'', N'2', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-14T00:13:16.980' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (147, N'DTSTEST03', N'DTSTEST03', N'', N'FOIL02', N'', N'3', N'', N'', N'3', N'1', N'PASS', N'TESTED OK', N'1', N'', 1, 0, 2, 2, CAST(N'2022-03-14T00:13:16.980' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (148, N'DTSTEST22', N'DTSTEST22', N'', N'FOIL03', N'', N'14', N'', N'', N'14', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-14T00:13:16.980' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (149, N'DTSTEST23', N'DTSTEST23', N'', N'FOIL03', N'', N'15', N'', N'', N'15', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-14T00:13:16.980' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (150, N'DTSTEST24', N'DTSTEST24', N'', N'FOIL03', N'', N'16', N'', N'', N'16', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-14T00:13:16.980' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (151, N'DTSTEST01', N'DTSTEST01', N'Reel3', N'FOIL02', N'', N'1', N'', N'', N'1', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-14T00:42:15.150' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (152, N'DTSTEST02', N'DTSTEST02', N'Reel3', N'FOIL02', N'', N'2', N'', N'', N'2', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-14T00:42:15.150' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (153, N'DTSTEST03', N'DTSTEST03', N'', N'FOIL02', N'', N'3', N'', N'', N'3', N'1', N'PASS', N'TESTED OK', N'1', N'', 1, 0, 2, 2, CAST(N'2022-03-14T00:42:15.150' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (154, N'DTSTEST04', N'DTSTEST04', N'', N'FOIL03', N'', N'1', N'', N'', N'1', N'1', N'FAIL', N'FAILFLT', N'3', N'', 0, 0, 2, 2, CAST(N'2022-03-14T00:42:15.150' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (155, N'DTSTEST05', N'DTSTEST05', N'', N'FOIL03', N'', N'2', N'', N'', N'2', N'1', N'FAIL', N'FAILFLT', N'3', N'', 0, 0, 2, 2, CAST(N'2022-03-14T00:42:15.150' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (156, N'DTSTEST11', N'DTSTEST11', N'', N'FOIL03', N'', N'3', N'', N'', N'3', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-14T00:42:15.150' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (157, N'DTSTEST12', N'DTSTEST12', N'', N'FOIL03', N'', N'4', N'', N'', N'4', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-14T00:42:15.150' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (158, N'DTSTEST13', N'DTSTEST13', N'', N'FOIL03', N'', N'5', N'', N'', N'5', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-14T00:42:15.150' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (159, N'DTSTEST14', N'DTSTEST14', N'', N'FOIL03', N'', N'6', N'', N'', N'6', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-14T00:42:15.150' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (160, N'DTSTEST15', N'DTSTEST15', N'', N'FOIL03', N'', N'7', N'', N'', N'7', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-14T00:42:15.150' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (161, N'DTSTEST16', N'DTSTEST16', N'', N'FOIL03', N'', N'8', N'', N'', N'8', N'1', N'FAIL', N'FAILFLT', N'2', N'', 0, 0, 2, 2, CAST(N'2022-03-14T00:42:15.150' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (162, N'DTSTEST17', N'DTSTEST17', N'', N'FOIL03', N'', N'9', N'', N'', N'9', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-14T00:42:15.150' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (163, N'DTSTEST18', N'DTSTEST18', N'', N'FOIL03', N'', N'10', N'', N'', N'10', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-14T00:42:15.150' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (164, N'DTSTEST19', N'DTSTEST19', N'', N'FOIL03', N'', N'11', N'', N'', N'11', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-14T00:42:15.150' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (165, N'DTSTEST20', N'DTSTEST20', N'', N'FOIL03', N'', N'12', N'', N'', N'12', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-14T00:42:15.150' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (166, N'DTSTEST21', N'DTSTEST21', N'', N'FOIL03', N'', N'13', N'', N'', N'13', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-14T00:42:15.150' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (167, N'DTSTEST22', N'DTSTEST22', N'', N'FOIL03', N'', N'14', N'', N'', N'14', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-14T00:42:15.150' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (168, N'DTSTEST23', N'DTSTEST23', N'', N'FOIL03', N'', N'15', N'', N'', N'15', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-14T00:42:15.150' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (169, N'DTSTEST24', N'DTSTEST24', N'', N'FOIL03', N'', N'16', N'', N'', N'16', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-14T00:42:15.150' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (170, N'DTSTEST01', N'DTSTEST01', N'', N'FOIL03', N'', N'1', N'', N'', N'1', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-14T00:47:01.010' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (171, N'DTSTEST02', N'DTSTEST02', N'', N'FOIL02', N'', N'2', N'', N'', N'2', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-14T00:47:01.010' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (172, N'DTSTEST03', N'DTSTEST03', N'', N'FOIL02', N'', N'3', N'', N'', N'3', N'1', N'PASS', N'TESTED OK', N'1', N'', 1, 0, 2, 2, CAST(N'2022-03-14T00:47:01.010' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (173, N'DTSTEST04', N'DTSTEST04', N'', N'FOIL03', N'', N'1', N'', N'', N'1', N'1', N'FAIL', N'FAILFLT', N'3', N'', 0, 0, 2, 2, CAST(N'2022-03-14T00:47:01.010' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (174, N'DTSTEST05', N'DTSTEST05', N'', N'FOIL03', N'', N'2', N'', N'', N'2', N'1', N'FAIL', N'FAILFLT', N'3', N'', 0, 0, 2, 2, CAST(N'2022-03-14T00:47:01.010' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (175, N'DTSTEST11', N'DTSTEST11', N'', N'FOIL03', N'', N'3', N'', N'', N'3', N'1', N'FAIL', N'FAILTEST', N'9', N'', 0, 0, 2, 2, CAST(N'2022-03-14T00:47:01.010' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (176, N'DTSTEST12', N'DTSTEST12', N'', N'FOIL03', N'', N'4', N'', N'', N'4', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-14T00:47:01.010' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (177, N'DTSTEST13', N'DTSTEST13', N'', N'FOIL03', N'', N'5', N'', N'', N'5', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-14T00:47:01.010' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (178, N'DTSTEST14', N'DTSTEST14', N'', N'FOIL03', N'', N'6', N'', N'', N'6', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-14T00:47:01.010' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (179, N'DTSTEST15', N'DTSTEST15', N'', N'FOIL03', N'', N'7', N'', N'', N'7', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-14T00:47:01.010' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (180, N'DTSTEST16', N'DTSTEST16', N'', N'FOIL03', N'', N'8', N'', N'', N'8', N'1', N'FAIL', N'FAILFLT', N'2', N'', 0, 0, 2, 2, CAST(N'2022-03-14T00:47:01.010' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (181, N'DTSTEST17', N'DTSTEST17', N'', N'FOIL03', N'', N'9', N'', N'', N'9', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-14T00:47:01.010' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (182, N'DTSTEST18', N'DTSTEST18', N'', N'FOIL03', N'', N'10', N'', N'', N'10', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-14T00:47:01.010' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (183, N'DTSTEST19', N'DTSTEST19', N'', N'FOIL03', N'', N'11', N'', N'', N'11', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-14T00:47:01.010' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (184, N'DTSTEST20', N'DTSTEST20', N'', N'FOIL03', N'', N'12', N'', N'', N'12', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-14T00:47:01.010' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (185, N'DTSTEST21', N'DTSTEST21', N'', N'FOIL03', N'', N'13', N'', N'', N'13', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-14T00:47:01.010' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (186, N'DTSTEST22', N'DTSTEST22', N'', N'FOIL03', N'', N'14', N'', N'', N'14', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-14T00:47:01.010' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (187, N'DTSTEST23', N'DTSTEST23', N'', N'FOIL03', N'', N'15', N'', N'', N'15', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-14T00:47:01.010' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (188, N'DTSTEST24', N'DTSTEST24', N'', N'FOIL03', N'', N'16', N'', N'', N'16', N'1', N'PASS', N'GOOD', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-14T00:47:01.010' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (189, N'DTSTEST01', N'DTSTEST01', N'', N'FOIL03', N'', N'1', N'', N'', N'1', N'1', N'FAIL', N'FAILTEST', N'9', N'', 0, 0, 2, 2, CAST(N'2022-03-14T00:58:27.783' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (190, N'DTSTEST02', N'DTSTEST02', N'', N'FOIL02', N'', N'2', N'', N'', N'2', N'1', N'FAIL', N'FAILTEST', N'9', N'', 0, 0, 2, 2, CAST(N'2022-03-14T00:58:27.783' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (191, N'DTSTEST03', N'DTSTEST03', N'', N'FOIL02', N'', N'3', N'', N'', N'3', N'1', N'FAIL', N'FAILTEST', N'9', N'', 0, 0, 2, 2, CAST(N'2022-03-14T00:58:27.783' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (192, N'DTSTEST04', N'DTSTEST04', N'', N'FOIL03', N'', N'1', N'', N'', N'1', N'1', N'FAIL', N'FAILFLT', N'3', N'', 0, 0, 2, 2, CAST(N'2022-03-14T00:58:27.783' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (193, N'DTSTEST05', N'DTSTEST05', N'', N'FOIL03', N'', N'2', N'', N'', N'2', N'1', N'FAIL', N'FAILFLT', N'3', N'', 0, 0, 2, 2, CAST(N'2022-03-14T00:58:27.783' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (194, N'DTSTEST11', N'DTSTEST11', N'', N'FOIL03', N'', N'3', N'', N'', N'3', N'1', N'FAIL', N'FAILTEST', N'9', N'', 0, 0, 2, 2, CAST(N'2022-03-14T00:58:27.783' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (195, N'DTSTEST12', N'DTSTEST12', N'', N'FOIL03', N'', N'4', N'', N'', N'4', N'1', N'FAIL', N'FAILTEST', N'9', N'', 0, 0, 2, 2, CAST(N'2022-03-14T00:58:27.783' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (196, N'DTSTEST13', N'DTSTEST13', N'', N'FOIL03', N'', N'5', N'', N'', N'5', N'1', N'FAIL', N'FAILTEST', N'9', N'', 0, 0, 2, 2, CAST(N'2022-03-14T00:58:27.783' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (197, N'DTSTEST14', N'DTSTEST14', N'', N'FOIL03', N'', N'6', N'', N'', N'6', N'1', N'FAIL', N'FAILTEST', N'9', N'', 0, 0, 2, 2, CAST(N'2022-03-14T00:58:27.783' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (198, N'DTSTEST15', N'DTSTEST15', N'', N'FOIL03', N'', N'7', N'', N'', N'7', N'1', N'FAIL', N'FAILTEST', N'9', N'', 0, 0, 2, 2, CAST(N'2022-03-14T00:58:27.783' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (199, N'DTSTEST16', N'DTSTEST16', N'', N'FOIL03', N'', N'8', N'', N'', N'8', N'1', N'FAIL', N'FAILFLT', N'2', N'', 0, 0, 2, 2, CAST(N'2022-03-14T00:58:27.783' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (200, N'DTSTEST17', N'DTSTEST17', N'', N'FOIL03', N'', N'9', N'', N'', N'9', N'1', N'FAIL', N'FAILTEST', N'9', N'', 0, 0, 2, 2, CAST(N'2022-03-14T00:58:27.783' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (201, N'DTSTEST18', N'DTSTEST18', N'', N'FOIL03', N'', N'10', N'', N'', N'10', N'1', N'FAIL', N'FAILTEST', N'9', N'', 0, 0, 2, 2, CAST(N'2022-03-14T00:58:27.783' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (202, N'DTSTEST19', N'DTSTEST19', N'', N'FOIL03', N'', N'11', N'', N'', N'11', N'1', N'FAIL', N'FAILTEST', N'9', N'', 0, 0, 2, 2, CAST(N'2022-03-14T00:58:27.783' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (203, N'DTSTEST20', N'DTSTEST20', N'', N'FOIL03', N'', N'12', N'', N'', N'12', N'1', N'FAIL', N'FAILTEST', N'9', N'', 0, 0, 2, 2, CAST(N'2022-03-14T00:58:27.783' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (204, N'DTSTEST21', N'DTSTEST21', N'', N'FOIL03', N'', N'13', N'', N'', N'13', N'1', N'FAIL', N'FAILTEST', N'9', N'', 0, 0, 2, 2, CAST(N'2022-03-14T00:58:27.783' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (205, N'DTSTEST22', N'DTSTEST22', N'', N'FOIL03', N'', N'14', N'', N'', N'14', N'1', N'FAIL', N'FAILTEST', N'9', N'', 0, 0, 2, 2, CAST(N'2022-03-14T00:58:27.783' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (206, N'DTSTEST23', N'DTSTEST23', N'', N'FOIL03', N'', N'15', N'', N'', N'15', N'1', N'FAIL', N'FAILTEST', N'9', N'', 0, 0, 2, 2, CAST(N'2022-03-14T00:58:27.783' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (207, N'DTSTEST24', N'DTSTEST24', N'', N'FOIL03', N'', N'16', N'', N'', N'16', N'1', N'FAIL', N'FAILTEST', N'9', N'', 0, 0, 2, 2, CAST(N'2022-03-14T00:58:27.783' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (208, N'DTSTEST01', N'DTSTEST01', N'', N'FOIL03', N'', N'1', N'', N'', N'1', N'1', N'PASS', N'GOOD', N'1', N'', 1, 0, 2, 2, CAST(N'2022-03-14T00:59:26.293' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (209, N'DTSTEST02', N'DTSTEST02', N'', N'FOIL02', N'', N'2', N'', N'', N'2', N'1', N'PASS', N'GOOD', N'1', N'', 1, 0, 2, 2, CAST(N'2022-03-14T00:59:26.293' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (210, N'DTSTEST03', N'DTSTEST03', N'', N'FOIL02', N'', N'3', N'', N'', N'3', N'1', N'PASS', N'GOOD', N'1', N'', 1, 0, 2, 2, CAST(N'2022-03-14T00:59:26.293' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (211, N'DTSTEST04', N'DTSTEST04', N'', N'FOIL03', N'', N'1', N'', N'', N'1', N'1', N'FAIL', N'FAILFLT', N'3', N'', 0, 0, 2, 2, CAST(N'2022-03-14T00:59:26.293' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (212, N'DTSTEST05', N'DTSTEST05', N'', N'FOIL03', N'', N'2', N'', N'', N'2', N'1', N'FAIL', N'FAILFLT', N'3', N'', 0, 0, 2, 2, CAST(N'2022-03-14T00:59:26.293' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (213, N'DTSTEST11', N'DTSTEST11', N'', N'FOIL03', N'', N'3', N'', N'', N'3', N'1', N'FAIL', N'FAILTEST', N'9', N'', 0, 0, 2, 2, CAST(N'2022-03-14T00:59:26.293' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (214, N'DTSTEST12', N'DTSTEST12', N'', N'FOIL03', N'', N'4', N'', N'', N'4', N'1', N'FAIL', N'FAILTEST', N'9', N'', 0, 0, 2, 2, CAST(N'2022-03-14T00:59:26.293' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (215, N'DTSTEST13', N'DTSTEST13', N'', N'FOIL03', N'', N'5', N'', N'', N'5', N'1', N'FAIL', N'FAILTEST', N'9', N'', 0, 0, 2, 2, CAST(N'2022-03-14T00:59:26.293' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (216, N'DTSTEST14', N'DTSTEST14', N'', N'FOIL03', N'', N'6', N'', N'', N'6', N'1', N'FAIL', N'FAILTEST', N'9', N'', 0, 0, 2, 2, CAST(N'2022-03-14T00:59:26.293' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (217, N'DTSTEST15', N'DTSTEST15', N'', N'FOIL03', N'', N'7', N'', N'', N'7', N'1', N'FAIL', N'FAILTEST', N'9', N'', 0, 0, 2, 2, CAST(N'2022-03-14T00:59:26.293' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (218, N'DTSTEST16', N'DTSTEST16', N'', N'FOIL03', N'', N'8', N'', N'', N'8', N'1', N'FAIL', N'FAILFLT', N'2', N'', 0, 0, 2, 2, CAST(N'2022-03-14T00:59:26.293' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (219, N'DTSTEST17', N'DTSTEST17', N'', N'FOIL03', N'', N'9', N'', N'', N'9', N'1', N'FAIL', N'FAILTEST', N'9', N'', 0, 0, 2, 2, CAST(N'2022-03-14T00:59:26.293' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (220, N'DTSTEST18', N'DTSTEST18', N'', N'FOIL03', N'', N'10', N'', N'', N'10', N'1', N'FAIL', N'FAILTEST', N'9', N'', 0, 0, 2, 2, CAST(N'2022-03-14T00:59:26.293' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (221, N'DTSTEST19', N'DTSTEST19', N'', N'FOIL03', N'', N'11', N'', N'', N'11', N'1', N'FAIL', N'FAILTEST', N'9', N'', 0, 0, 2, 2, CAST(N'2022-03-14T00:59:26.293' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (222, N'DTSTEST20', N'DTSTEST20', N'', N'FOIL03', N'', N'12', N'', N'', N'12', N'1', N'FAIL', N'FAILTEST', N'9', N'', 0, 0, 2, 2, CAST(N'2022-03-14T00:59:26.293' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (223, N'DTSTEST21', N'DTSTEST21', N'', N'FOIL03', N'', N'13', N'', N'', N'13', N'1', N'FAIL', N'FAILTEST', N'9', N'', 0, 0, 2, 2, CAST(N'2022-03-14T00:59:26.293' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (224, N'DTSTEST22', N'DTSTEST22', N'', N'FOIL03', N'', N'14', N'', N'', N'14', N'1', N'FAIL', N'FAILTEST', N'9', N'', 0, 0, 2, 2, CAST(N'2022-03-14T00:59:26.293' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (225, N'DTSTEST23', N'DTSTEST23', N'', N'FOIL03', N'', N'15', N'', N'', N'15', N'1', N'FAIL', N'FAILTEST', N'9', N'', 0, 0, 2, 2, CAST(N'2022-03-14T00:59:26.293' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (226, N'DTSTEST24', N'DTSTEST24', N'', N'FOIL03', N'', N'16', N'', N'', N'16', N'1', N'FAIL', N'FAILTEST', N'9', N'', 0, 0, 2, 2, CAST(N'2022-03-14T00:59:26.293' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (227, N'DTSTEST01', N'DTSTEST01', N'', N'FOIL03', N'', N'1', N'', N'', N'1', N'1', N'PASS', N'GOOD', N'1', N'', 1, 0, 2, 2, CAST(N'2022-03-14T01:04:54.597' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (228, N'DTSTEST02', N'DTSTEST02', N'', N'FOIL02', N'', N'2', N'', N'', N'2', N'1', N'PASS', N'GOOD', N'1', N'', 1, 0, 2, 2, CAST(N'2022-03-14T01:04:54.597' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (229, N'DTSTEST03', N'DTSTEST03', N'', N'FOIL02', N'', N'3', N'', N'', N'3', N'1', N'PASS', N'GOOD', N'1', N'', 1, 0, 2, 2, CAST(N'2022-03-14T01:04:54.597' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (230, N'DTSTEST04', N'DTSTEST04', N'', N'FOIL03', N'', N'1', N'', N'', N'1', N'1', N'FAIL', N'FAILFLT', N'3', N'', 0, 0, 2, 2, CAST(N'2022-03-14T01:04:54.597' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (231, N'DTSTEST05', N'DTSTEST05', N'', N'FOIL03', N'', N'2', N'', N'', N'2', N'1', N'FAIL', N'FAILFLT', N'3', N'', 0, 0, 2, 2, CAST(N'2022-03-14T01:04:54.597' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (232, N'DTSTEST11', N'DTSTEST11', N'', N'FOIL03', N'', N'3', N'', N'', N'3', N'1', N'FAIL', N'FAILTEST', N'9', N'', 0, 0, 2, 2, CAST(N'2022-03-14T01:04:54.597' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (233, N'DTSTEST12', N'DTSTEST12', N'', N'FOIL03', N'', N'4', N'', N'', N'4', N'1', N'PASS', N'TESTED OK', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-14T01:04:54.597' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (234, N'DTSTEST13', N'DTSTEST13', N'', N'FOIL03', N'', N'5', N'', N'', N'5', N'1', N'FAIL', N'FAILTEST', N'9', N'', 0, 0, 2, 2, CAST(N'2022-03-14T01:04:54.597' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (235, N'DTSTEST14', N'DTSTEST14', N'', N'FOIL03', N'', N'6', N'', N'', N'6', N'1', N'FAIL', N'FAILTEST', N'9', N'', 0, 0, 2, 2, CAST(N'2022-03-14T01:04:54.597' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (236, N'DTSTEST15', N'DTSTEST15', N'', N'FOIL03', N'', N'7', N'', N'', N'7', N'1', N'FAIL', N'FAILTEST', N'9', N'', 0, 0, 2, 2, CAST(N'2022-03-14T01:04:54.597' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (237, N'DTSTEST16', N'DTSTEST16', N'', N'FOIL03', N'', N'8', N'', N'', N'8', N'1', N'FAIL', N'FAILFLT', N'2', N'', 0, 0, 2, 2, CAST(N'2022-03-14T01:04:54.597' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (238, N'DTSTEST17', N'DTSTEST17', N'', N'FOIL03', N'', N'9', N'', N'', N'9', N'1', N'FAIL', N'FAILTEST', N'9', N'', 0, 0, 2, 2, CAST(N'2022-03-14T01:04:54.597' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (239, N'DTSTEST18', N'DTSTEST18', N'', N'FOIL03', N'', N'10', N'', N'', N'10', N'1', N'FAIL', N'FAILTEST', N'9', N'', 0, 0, 2, 2, CAST(N'2022-03-14T01:04:54.597' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (240, N'DTSTEST19', N'DTSTEST19', N'', N'FOIL03', N'', N'11', N'', N'', N'11', N'1', N'FAIL', N'FAILTEST', N'9', N'', 0, 0, 2, 2, CAST(N'2022-03-14T01:04:54.597' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (241, N'DTSTEST20', N'DTSTEST20', N'', N'FOIL03', N'', N'12', N'', N'', N'12', N'1', N'FAIL', N'FAILTEST', N'9', N'', 0, 0, 2, 2, CAST(N'2022-03-14T01:04:54.597' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (242, N'DTSTEST21', N'DTSTEST21', N'', N'FOIL03', N'', N'13', N'', N'', N'13', N'1', N'FAIL', N'FAILTEST', N'9', N'', 0, 0, 2, 2, CAST(N'2022-03-14T01:04:54.597' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (243, N'DTSTEST22', N'DTSTEST22', N'', N'FOIL03', N'', N'14', N'', N'', N'14', N'1', N'FAIL', N'FAILTEST', N'9', N'', 0, 0, 2, 2, CAST(N'2022-03-14T01:04:54.597' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (244, N'DTSTEST23', N'DTSTEST23', N'', N'FOIL03', N'', N'15', N'', N'', N'15', N'1', N'FAIL', N'FAILTEST', N'9', N'', 0, 0, 2, 2, CAST(N'2022-03-14T01:04:54.597' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (245, N'DTSTEST24', N'DTSTEST24', N'', N'FOIL03', N'', N'16', N'', N'', N'16', N'1', N'FAIL', N'FAILTEST', N'9', N'', 0, 0, 2, 2, CAST(N'2022-03-14T01:04:54.597' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (246, N'DTSTEST01', N'DTSTEST01', N'', N'FOIL03', N'', N'1', N'', N'', N'1', N'1', N'PASS', N'GOOD', N'1', N'', 1, 0, 2, 2, CAST(N'2022-03-14T01:07:49.157' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (247, N'DTSTEST02', N'DTSTEST02', N'', N'FOIL02', N'', N'2', N'', N'', N'2', N'1', N'PASS', N'GOOD', N'1', N'', 1, 0, 2, 2, CAST(N'2022-03-14T01:07:49.157' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (248, N'DTSTEST03', N'DTSTEST03', N'', N'FOIL02', N'', N'3', N'', N'', N'3', N'1', N'PASS', N'GOOD', N'1', N'', 1, 0, 2, 2, CAST(N'2022-03-14T01:07:49.157' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (249, N'DTSTEST04', N'DTSTEST04', N'', N'FOIL03', N'', N'1', N'', N'', N'1', N'1', N'FAIL', N'FAILFLT', N'3', N'', 0, 0, 2, 2, CAST(N'2022-03-14T01:07:49.157' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (250, N'DTSTEST05', N'DTSTEST05', N'', N'FOIL03', N'', N'2', N'', N'', N'2', N'1', N'FAIL', N'FAILFLT', N'3', N'', 0, 0, 2, 2, CAST(N'2022-03-14T01:07:49.157' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (251, N'DTSTEST11', N'DTSTEST11', N'', N'FOIL03', N'', N'3', N'', N'', N'3', N'1', N'FAIL', N'FAILTEST', N'9', N'', 0, 0, 2, 2, CAST(N'2022-03-14T01:07:49.157' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (252, N'DTSTEST12', N'DTSTEST12', N'', N'FOIL03', N'', N'4', N'', N'', N'4', N'1', N'PASS', N'GOOD', N'1', N'', 1, 0, 2, 2, CAST(N'2022-03-14T01:07:49.157' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (253, N'DTSTEST13', N'DTSTEST13', N'', N'FOIL03', N'', N'5', N'', N'', N'5', N'1', N'FAIL', N'FAILTEST', N'9', N'', 0, 0, 2, 2, CAST(N'2022-03-14T01:07:49.157' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (254, N'DTSTEST14', N'DTSTEST14', N'', N'FOIL03', N'', N'6', N'', N'', N'6', N'1', N'FAIL', N'FAILTEST', N'9', N'', 0, 0, 2, 2, CAST(N'2022-03-14T01:07:49.157' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (255, N'DTSTEST15', N'DTSTEST15', N'', N'FOIL03', N'', N'7', N'', N'', N'7', N'1', N'FAIL', N'FAILTEST', N'9', N'', 0, 0, 2, 2, CAST(N'2022-03-14T01:07:49.157' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (256, N'DTSTEST16', N'DTSTEST16', N'', N'FOIL03', N'', N'8', N'', N'', N'8', N'1', N'FAIL', N'FAILFLT', N'2', N'', 0, 0, 2, 2, CAST(N'2022-03-14T01:07:49.157' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (257, N'DTSTEST17', N'DTSTEST17', N'', N'FOIL03', N'', N'9', N'', N'', N'9', N'1', N'FAIL', N'FAILTEST', N'9', N'', 0, 0, 2, 2, CAST(N'2022-03-14T01:07:49.157' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (258, N'DTSTEST18', N'DTSTEST18', N'', N'FOIL03', N'', N'10', N'', N'', N'10', N'1', N'FAIL', N'FAILTEST', N'9', N'', 0, 0, 2, 2, CAST(N'2022-03-14T01:07:49.157' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (259, N'DTSTEST19', N'DTSTEST19', N'', N'FOIL03', N'', N'11', N'', N'', N'11', N'1', N'FAIL', N'FAILTEST', N'9', N'', 0, 0, 2, 2, CAST(N'2022-03-14T01:07:49.157' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (260, N'DTSTEST20', N'DTSTEST20', N'', N'FOIL03', N'', N'12', N'', N'', N'12', N'1', N'FAIL', N'FAILTEST', N'9', N'', 0, 0, 2, 2, CAST(N'2022-03-14T01:07:49.157' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (261, N'DTSTEST21', N'DTSTEST21', N'', N'FOIL03', N'', N'13', N'', N'', N'13', N'1', N'FAIL', N'FAILTEST', N'9', N'', 0, 0, 2, 2, CAST(N'2022-03-14T01:07:49.157' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (262, N'DTSTEST22', N'DTSTEST22', N'', N'FOIL03', N'', N'14', N'', N'', N'14', N'1', N'FAIL', N'FAILTEST', N'9', N'', 0, 0, 2, 2, CAST(N'2022-03-14T01:07:49.157' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (263, N'DTSTEST23', N'DTSTEST23', N'', N'FOIL03', N'', N'15', N'', N'', N'15', N'1', N'FAIL', N'FAILTEST', N'9', N'', 0, 0, 2, 2, CAST(N'2022-03-14T01:07:49.157' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (264, N'DTSTEST24', N'DTSTEST24', N'', N'FOIL03', N'', N'16', N'', N'', N'16', N'1', N'FAIL', N'FAILTEST', N'9', N'', 0, 0, 2, 2, CAST(N'2022-03-14T01:07:49.157' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (265, N'DTSTEST01', N'DTSTEST01', N'', N'FOIL03', N'', N'1', N'', N'', N'1', N'1', N'PASS', N'GOOD', N'1', N'', 1, 0, 2, 2, CAST(N'2022-03-14T01:17:52.960' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (266, N'DTSTEST02', N'DTSTEST02', N'', N'FOIL02', N'', N'2', N'', N'', N'2', N'1', N'PASS', N'GOOD', N'1', N'', 1, 0, 2, 2, CAST(N'2022-03-14T01:17:52.960' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (267, N'DTSTEST03', N'DTSTEST03', N'', N'FOIL02', N'', N'3', N'', N'', N'3', N'1', N'PASS', N'GOOD', N'1', N'', 1, 0, 2, 2, CAST(N'2022-03-14T01:17:52.960' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (268, N'DTSTEST04', N'DTSTEST04', N'', N'FOIL03', N'', N'1', N'', N'', N'1', N'1', N'PASS', N'TESTED OK', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-14T01:17:52.960' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (269, N'DTSTEST05', N'DTSTEST05', N'', N'FOIL03', N'', N'2', N'', N'', N'2', N'1', N'PASS', N'TESTED OK', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-14T01:17:52.960' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (270, N'DTSTEST11', N'DTSTEST11', N'', N'FOIL03', N'', N'3', N'', N'', N'3', N'1', N'PASS', N'TESTED OK', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-14T01:17:52.960' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (271, N'DTSTEST12', N'DTSTEST12', N'', N'FOIL03', N'', N'4', N'', N'', N'4', N'1', N'PASS', N'GOOD', N'1', N'', 1, 0, 2, 2, CAST(N'2022-03-14T01:17:52.960' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (272, N'DTSTEST13', N'DTSTEST13', N'', N'FOIL03', N'', N'5', N'', N'', N'5', N'1', N'PASS', N'TESTED OK', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-14T01:17:52.960' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (273, N'DTSTEST14', N'DTSTEST14', N'', N'FOIL03', N'', N'6', N'', N'', N'6', N'1', N'PASS', N'TESTED OK', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-14T01:17:52.960' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (274, N'DTSTEST15', N'DTSTEST15', N'', N'FOIL03', N'', N'7', N'', N'', N'7', N'1', N'PASS', N'TESTED OK', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-14T01:17:52.960' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (275, N'DTSTEST16', N'DTSTEST16', N'', N'FOIL03', N'', N'8', N'', N'', N'8', N'1', N'PASS', N'TESTED OK', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-14T01:17:52.960' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (276, N'DTSTEST17', N'DTSTEST17', N'', N'FOIL03', N'', N'9', N'', N'', N'9', N'1', N'PASS', N'TESTED OK', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-14T01:17:52.960' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (277, N'DTSTEST18', N'DTSTEST18', N'', N'FOIL03', N'', N'10', N'', N'', N'10', N'1', N'PASS', N'TESTED OK', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-14T01:17:52.960' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (278, N'DTSTEST19', N'DTSTEST19', N'', N'FOIL03', N'', N'11', N'', N'', N'11', N'1', N'PASS', N'TESTED OK', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-14T01:17:52.960' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (279, N'DTSTEST20', N'DTSTEST20', N'', N'FOIL03', N'', N'12', N'', N'', N'12', N'1', N'PASS', N'TESTED OK', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-14T01:17:52.960' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (280, N'DTSTEST21', N'DTSTEST21', N'', N'FOIL03', N'', N'13', N'', N'', N'13', N'1', N'PASS', N'TESTED OK', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-14T01:17:52.960' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (281, N'DTSTEST22', N'DTSTEST22', N'', N'FOIL03', N'', N'14', N'', N'', N'14', N'1', N'PASS', N'TESTED OK', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-14T01:17:52.960' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (282, N'DTSTEST23', N'DTSTEST23', N'', N'FOIL03', N'', N'15', N'', N'', N'15', N'1', N'PASS', N'TESTED OK', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-14T01:17:52.960' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (283, N'DTSTEST24', N'DTSTEST24', N'', N'FOIL03', N'', N'16', N'', N'', N'16', N'1', N'PASS', N'TESTED OK', N'2', N'', 1, 0, 2, 2, CAST(N'2022-03-14T01:17:52.960' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (284, N'DTSTEST01', N'DTSTEST01', N'', N'FOIL03', N'', N'1', N'', N'', N'1', N'1', N'PASS', N'GOOD', N'1', N'', 1, 1, 2, 2, CAST(N'2022-03-14T01:19:12.633' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (285, N'DTSTEST02', N'DTSTEST02', N'', N'FOIL02', N'', N'2', N'', N'', N'2', N'1', N'PASS', N'GOOD', N'1', N'', 1, 1, 2, 2, CAST(N'2022-03-14T01:19:12.633' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (286, N'DTSTEST03', N'DTSTEST03', N'', N'FOIL02', N'', N'3', N'', N'', N'3', N'1', N'PASS', N'GOOD', N'1', N'', 1, 1, 2, 2, CAST(N'2022-03-14T01:19:12.633' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (287, N'DTSTEST04', N'DTSTEST04', N'', N'FOIL03', N'', N'1', N'', N'', N'1', N'1', N'PASS', N'TESTED OK', N'2', N'', 1, 1, 2, 2, CAST(N'2022-03-14T01:19:12.633' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (288, N'DTSTEST05', N'DTSTEST05', N'', N'FOIL03', N'', N'2', N'', N'', N'2', N'1', N'PASS', N'TESTED OK', N'2', N'', 1, 1, 2, 2, CAST(N'2022-03-14T01:19:12.633' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (289, N'DTSTEST11', N'DTSTEST11', N'', N'FOIL03', N'', N'3', N'', N'', N'3', N'1', N'PASS', N'TESTED OK', N'2', N'', 1, 1, 2, 2, CAST(N'2022-03-14T01:19:12.633' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (290, N'DTSTEST12', N'DTSTEST12', N'', N'FOIL03', N'', N'4', N'', N'', N'4', N'1', N'PASS', N'GOOD', N'1', N'', 1, 1, 2, 2, CAST(N'2022-03-14T01:19:12.633' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (291, N'DTSTEST13', N'DTSTEST13', N'', N'FOIL03', N'', N'5', N'', N'', N'5', N'1', N'PASS', N'TESTED OK', N'2', N'', 1, 1, 2, 2, CAST(N'2022-03-14T01:19:12.633' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (292, N'DTSTEST14', N'DTSTEST14', N'', N'FOIL03', N'', N'6', N'', N'', N'6', N'1', N'FAIL', N'FAILFLT', N'5000', N'', 0, 1, 2, 2, CAST(N'2022-03-14T01:19:12.633' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (293, N'DTSTEST15', N'DTSTEST15', N'', N'FOIL03', N'', N'7', N'', N'', N'7', N'1', N'FAIL', N'FAILGLT', N'5001', N'', 0, 1, 2, 2, CAST(N'2022-03-14T01:19:12.633' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (294, N'DTSTEST16', N'DTSTEST16', N'', N'FOIL03', N'', N'8', N'', N'', N'8', N'1', N'FAIL', N'FAILTEST', N'5002', N'', 0, 1, 2, 2, CAST(N'2022-03-14T01:19:12.633' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (295, N'DTSTEST17', N'DTSTEST17', N'', N'FOIL03', N'', N'9', N'', N'', N'9', N'1', N'PASS', N'TESTED OK', N'2', N'', 1, 1, 2, 2, CAST(N'2022-03-14T01:19:12.633' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (296, N'DTSTEST18', N'DTSTEST18', N'', N'FOIL03', N'', N'10', N'', N'', N'10', N'1', N'PASS', N'TESTED OK', N'2', N'', 1, 1, 2, 2, CAST(N'2022-03-14T01:19:12.633' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (297, N'DTSTEST19', N'DTSTEST19', N'', N'FOIL03', N'', N'11', N'', N'', N'11', N'1', N'PASS', N'TESTED OK', N'2', N'', 1, 1, 2, 2, CAST(N'2022-03-14T01:19:12.633' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (298, N'DTSTEST20', N'DTSTEST20', N'', N'FOIL03', N'', N'12', N'', N'', N'12', N'1', N'PASS', N'TESTED OK', N'2', N'', 1, 1, 2, 2, CAST(N'2022-03-14T01:19:12.633' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (299, N'DTSTEST21', N'DTSTEST21', N'', N'FOIL03', N'', N'13', N'', N'', N'13', N'1', N'PASS', N'TESTED OK', N'2', N'', 1, 1, 2, 2, CAST(N'2022-03-14T01:19:12.633' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (300, N'DTSTEST22', N'DTSTEST22', N'', N'FOIL03', N'', N'14', N'', N'', N'14', N'1', N'PASS', N'TESTED OK', N'2', N'', 1, 1, 2, 2, CAST(N'2022-03-14T01:19:12.633' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (301, N'DTSTEST23', N'DTSTEST23', N'', N'FOIL03', N'', N'15', N'', N'', N'15', N'1', N'PASS', N'TESTED OK', N'2', N'', 1, 1, 2, 2, CAST(N'2022-03-14T01:19:12.633' AS DateTime), 3)
+GO
+INSERT [dbo].[DIS_DeviceInformation] ([Id], [DeviceId], [AliasId], [SourceSubstrateId], [TargetSubstrateId], [SourcePositionId], [TargetPositionId], [FromX], [FromY], [ToX], [ToY], [Result], [BinDesc], [BinCode], [SAPBarcode], [Pick], [Active], [LotId], [OpId], [InsertDateTime], [EqpId]) VALUES (302, N'DTSTEST24', N'DTSTEST24', N'', N'FOIL03', N'', N'16', N'', N'', N'16', N'1', N'PASS', N'TESTED OK', N'2', N'', 1, 1, 2, 2, CAST(N'2022-03-14T01:19:12.633' AS DateTime), 3)
+GO
+SET IDENTITY_INSERT [dbo].[DIS_DeviceInformation] OFF
+GO
+SET IDENTITY_INSERT [dbo].[DIS_Equipment] ON 
+GO
+INSERT [dbo].[DIS_Equipment] ([EqpId], [EquipmentName]) VALUES (1, N'3TST0101')
+GO
+INSERT [dbo].[DIS_Equipment] ([EqpId], [EquipmentName]) VALUES (2, N'3WBD0101')
+GO
+INSERT [dbo].[DIS_Equipment] ([EqpId], [EquipmentName]) VALUES (3, N'DTS')
+GO
+INSERT [dbo].[DIS_Equipment] ([EqpId], [EquipmentName]) VALUES (4, N'3AVI1201')
+GO
+INSERT [dbo].[DIS_Equipment] ([EqpId], [EquipmentName]) VALUES (5, N'3SNT0101')
+GO
+INSERT [dbo].[DIS_Equipment] ([EqpId], [EquipmentName]) VALUES (6, N'3FLT0101')
+GO
+INSERT [dbo].[DIS_Equipment] ([EqpId], [EquipmentName]) VALUES (7, N'3GLT0101')
+GO
+INSERT [dbo].[DIS_Equipment] ([EqpId], [EquipmentName]) VALUES (8, N'2DAT0101')
+GO
+INSERT [dbo].[DIS_Equipment] ([EqpId], [EquipmentName]) VALUES (9, N'3BLU0101')
+GO
+INSERT [dbo].[DIS_Equipment] ([EqpId], [EquipmentName]) VALUES (10, N'3BIT0101')
+GO
+INSERT [dbo].[DIS_Equipment] ([EqpId], [EquipmentName]) VALUES (11, N'3TNS0101')
+GO
+INSERT [dbo].[DIS_Equipment] ([EqpId], [EquipmentName]) VALUES (12, N'3VRR0201')
+GO
+SET IDENTITY_INSERT [dbo].[DIS_Equipment] OFF
+GO
+SET IDENTITY_INSERT [dbo].[DIS_Lot] ON 
+GO
+INSERT [dbo].[DIS_Lot] ([LotId], [LotNumber]) VALUES (1, N'A22010001')
+GO
+INSERT [dbo].[DIS_Lot] ([LotId], [LotNumber]) VALUES (2, N'A22010002')
+GO
+INSERT [dbo].[DIS_Lot] ([LotId], [LotNumber]) VALUES (3, N'A22010003')
+GO
+INSERT [dbo].[DIS_Lot] ([LotId], [LotNumber]) VALUES (4, N'A22010004')
+GO
+INSERT [dbo].[DIS_Lot] ([LotId], [LotNumber]) VALUES (5, N'A22010005')
+GO
+INSERT [dbo].[DIS_Lot] ([LotId], [LotNumber]) VALUES (6, N'A22010006')
+GO
+INSERT [dbo].[DIS_Lot] ([LotId], [LotNumber]) VALUES (7, N'A22010007')
+GO
+INSERT [dbo].[DIS_Lot] ([LotId], [LotNumber]) VALUES (8, N'A22010008')
+GO
+INSERT [dbo].[DIS_Lot] ([LotId], [LotNumber]) VALUES (9, N'A22010009')
+GO
+INSERT [dbo].[DIS_Lot] ([LotId], [LotNumber]) VALUES (10, N'A22010010')
+GO
+INSERT [dbo].[DIS_Lot] ([LotId], [LotNumber]) VALUES (11, N'A22010002.2')
+GO
+INSERT [dbo].[DIS_Lot] ([LotId], [LotNumber]) VALUES (12, N'A22010002.3')
+GO
+INSERT [dbo].[DIS_Lot] ([LotId], [LotNumber]) VALUES (13, N'A22010002.4')
+GO
+INSERT [dbo].[DIS_Lot] ([LotId], [LotNumber]) VALUES (14, N'A22010002.5')
+GO
+SET IDENTITY_INSERT [dbo].[DIS_Lot] OFF
+GO
+ALTER TABLE [dbo].[DIS_DeviceInformation]  WITH CHECK ADD  CONSTRAINT [FK_DIS_DeviceInformation_DIS_Equipment] FOREIGN KEY([EqpId])
+REFERENCES [dbo].[DIS_Equipment] ([EqpId])
+GO
+ALTER TABLE [dbo].[DIS_DeviceInformation] CHECK CONSTRAINT [FK_DIS_DeviceInformation_DIS_Equipment]
+GO
+ALTER TABLE [dbo].[DIS_DeviceInformation]  WITH CHECK ADD  CONSTRAINT [FK_DIS_DeviceInformation_DIS_Lot] FOREIGN KEY([LotId])
+REFERENCES [dbo].[DIS_Lot] ([LotId])
+GO
+ALTER TABLE [dbo].[DIS_DeviceInformation] CHECK CONSTRAINT [FK_DIS_DeviceInformation_DIS_Lot]
+GO
+/****** Object:  StoredProcedure [dbo].[PR_DIS_GetDeviceInfoByLot]    Script Date: 3/18/2022 1:09:34 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author: Jackson
+-- Create date: 02/03/2022
+-- Description:	To Get Device Information by lot number
+-- =============================================
+CREATE PROCEDURE [dbo].[PR_DIS_GetDeviceInfoByLot] 
+	@I_LotNumber VARCHAR(50),
+	@I_Operation VARCHAR(50),
+	@I_Equipment VARCHAR(50),
+	@O_Success INT OUTPUT,
+	@O_ErrTxt VARCHAR(250) OUTPUT
+
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	DECLARE @ERR_NUM INT, @ERR_MSG NVARCHAR(4000)
+	DECLARE @DeviceCount INT
+
+	SET @DeviceCount = 0
+	SET @O_Success = 0
+	SET @O_ErrTxt = ''
+
+	BEGIN TRY
+		SELECT @DeviceCount = COUNT(di.DeviceId)
+		FROM DIS_DeviceInformation di
+		INNER JOIN DIS_Lot l ON l.LotId = di.LotId
+		INNER JOIN DIS_Equipment e ON e.EqpId = di.EqpId
+		WHERE l.LotNumber = @I_LotNumber
+		AND di.OpId <= @I_Operation AND di.Active = 1
+
+		IF (@DeviceCount = 0)
+			BEGIN
+				SET @O_Success = 1
+				SET @O_ErrTxt = 'No Device Found'
+			END
+		ELSE
+			BEGIN
+				SELECT di.DeviceId, di.AliasId, di.TargetSubstrateId, di.TargetPositionId,
+				di.ToX, di.ToY, di.Result, di.BinCode, di.Pick, di.BinDesc
+				FROM DIS_DeviceInformation di
+				INNER JOIN DIS_Lot l ON l.LotId = di.LotId
+				INNER JOIN DIS_Equipment e ON e.EqpId = di.EqpId
+				WHERE l.LotNumber = @I_LotNumber
+				AND di.OpId <= @I_Operation AND di.Active = 1
+			END
+	END TRY
+	BEGIN CATCH
+		SET @O_Success = -1
+		SELECT @ERR_NUM = ERROR_NUMBER(), @ERR_MSG = ERROR_MESSAGE()
+		SET @O_ErrTxt = @ERR_MSG
+	END CATCH
+END
+GO
+/****** Object:  StoredProcedure [dbo].[PR_DIS_SetDeviceInfo]    Script Date: 3/18/2022 1:09:34 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author: Jackson
+-- Create date: 02/03/2022
+-- Version: 1.0.0.0
+-- Description:	To Set Device Information
+-- =============================================
+CREATE PROCEDURE [dbo].[PR_DIS_SetDeviceInfo] 
+	@I_LotNumber VARCHAR(50),
+	@I_Operation INT,
+	@I_Equipment VARCHAR(250),
+	@O_Success INT OUTPUT,
+	@O_ErrText VARCHAR(250) OUTPUT
+
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	DECLARE @ERR_NUM INT, @ERR_MSG NVARCHAR(4000)
+	DECLARE @CurrDateTime DATETIME
+
+	SET NOCOUNT ON;
+	SET @O_Success = 0
+	SET @CurrDateTime = GETDATE()
+
+	BEGIN TRY
+			
+SELECT 1/0 AS error
+
+
+	END TRY
+	BEGIN CATCH
+		SET @O_Success = -1
+		SELECT @ERR_NUM = ERROR_NUMBER(), @ERR_MSG = ERROR_MESSAGE()
+		SET @O_ErrText = @ERR_MSG
+	END CATCH
+END
+GO
+/****** Object:  StoredProcedure [dbo].[PR_DIS_UpdateDeviceInfo]    Script Date: 3/18/2022 1:09:34 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author: Jackson
+-- Create date: 02/03/2022
+-- Version: 1.0.0.0
+-- Description:	To Set Device Information
+-- =============================================
+CREATE PROCEDURE [dbo].[PR_DIS_UpdateDeviceInfo] 
+	@Tbl_DeviceInformationList DIS_DeviceInformationList READONLY,
+	@I_LotNumber VARCHAR(50),
+	@I_Operation INT,
+	@I_Equipment VARCHAR(250),
+	@O_Success INT OUTPUT,
+	@O_ErrTxt VARCHAR(250) OUTPUT
+
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	DECLARE @ERR_NUM INT, @ERR_MSG NVARCHAR(4000)
+	DECLARE @TRANS_NAME VARCHAR(50)
+	DECLARE @CurrDateTime DATETIME
+
+	SET NOCOUNT ON;
+	SET @TRANS_NAME = 'UpdateDeviceInfo'
+	SET @O_Success = 0
+	SET @CurrDateTime = GETDATE()
+
+	BEGIN TRY
+		BEGIN TRANSACTION @TRANS_NAME
+			
+			SELECT * INTO #TMPDeviceInfo FROM @Tbl_DeviceInformationList
+			
+			UPDATE DIS_DeviceInformation
+			SET 
+			Active = 0
+			FROM DIS_DeviceInformation di
+			INNER JOIN #TMPDeviceInfo tmp ON tmp.DeviceId = di.DeviceId
+			INNER JOIN DIS_Lot l ON l.LotId = di.LotId
+			WHERE l.LotNumber = @I_LotNumber AND di.OpId <= @I_Operation
+
+			INSERT INTO DIS_DeviceInformation
+			(DeviceId,AliasId,SourceSubstrateId,TargetSubstrateId,SourcePositionId,TargetPositionId,FromX,FromY,ToX
+			,ToY,Result,BinCode,BinDesc,SAPBarcode,Pick,Active,LotId,OpId,InsertDateTime,EqpId)
+			SELECT
+			tpi.DeviceId, tpi.AliasId, tpi.SourceSubstrateId, tpi.TargetSubstrateId, 
+			tpi.SourcePositionId, tpi.TargetPositionId, tpi.FromX, tpi.FromY, tpi.ToX
+			, tpi.ToY, 
+			Result = CASE WHEN tpi.Result = 'UNKNOWN' THEN 'PREV FAIL' ELSE tpi.Result END,
+			tpi.BinCode, tpi.BinDesc, '', Pick = CASE WHEN tpi.Result = 'UNKNOWN' OR tpi.Result = 'FAIL' THEN 0 ELSE 1 END,
+			1, (SELECT LotId FROM DIS_Lot WHERE LotNumber = @I_LotNumber), @I_Operation, @CurrDateTime, 
+			(SELECT EqpId FROM DIS_Equipment WHERE EquipmentName = @I_Equipment)
+			FROM  #TMPDeviceInfo tpi
+
+			DROP TABLE #TMPDeviceInfo
+
+		COMMIT TRANSACTION @TRANS_NAME
+
+	END TRY
+	BEGIN CATCH
+		SET @O_Success = -1
+		SELECT @ERR_NUM = ERROR_NUMBER(), @ERR_MSG = ERROR_MESSAGE()
+		ROLLBACK TRANSACTION @TRANS_NAME
+		SET @O_ErrTxt = @ERR_MSG
+	END CATCH
+END
+GO
+/****** Object:  StoredProcedure [dbo].[PR_DIS_UpdateMergeDevice]    Script Date: 3/18/2022 1:09:34 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author: Jackson
+-- Create date: 02/03/2022
+-- Description:	To Merge the Device Information 
+-- =============================================
+CREATE PROCEDURE [dbo].[PR_DIS_UpdateMergeDevice]
+	@I_MotherLot VARCHAR(50),
+	@I_ChildLot VARCHAR(50),
+	@I_ChildLot2 VARCHAR(50),
+	@I_ChildLot3 VARCHAR(50),
+	@I_ChildLot4 VARCHAR(50),
+	@I_Equipment VARCHAR(50),
+	@I_Operation INT,
+	@O_Success INT OUTPUT,
+	@O_ErrTxt VARCHAR(250) OUTPUT
+
+AS
+BEGIN
+	DECLARE @ERR_NUM INT, @ERR_MSG NVARCHAR(4000)
+	DECLARE @TRANS_NAME VARCHAR(50)
+	DECLARE @CurrDate DATETIME
+
+	SET NOCOUNT ON;
+	SET @O_Success = 0
+	SET @O_ErrTxt = ''
+	SET @CurrDate = GETDATE()
+	SET @TRANS_NAME = 'MergeDevice'
+
+	BEGIN TRY
+		BEGIN TRANSACTION @TRANS_NAME
+			
+			SELECT * INTO #TMPMergeDevicesList FROM DIS_DeviceInformation di
+			WHERE di.LotId in (SELECT LotId FROM DIS_Lot WHERE LotNumber = @I_MotherLot OR LotNumber = @I_ChildLot
+			OR LotNumber = @I_ChildLot2 OR LotNumber = @I_ChildLot3
+			OR LotNumber = @I_ChildLot4) 
+			AND di.Active = 1
+
+			UPDATE DIS_DeviceInformation
+			SET 
+			Active = 0
+			FROM DIS_DeviceInformation di
+			INNER JOIN DIS_Lot l ON l.LotId = di.LotId
+			WHERE (l.LotNumber = @I_MotherLot OR l.LotNumber = @I_ChildLot
+			OR l.LotNumber = @I_ChildLot2 OR l.LotNumber = @I_ChildLot3
+			OR l.LotNumber = @I_ChildLot4)
+			AND di.Active = 1
+
+			INSERT INTO DIS_DeviceInformation
+			(DeviceId,AliasId,SourceSubstrateId,TargetSubstrateId,SourcePositionId,TargetPositionId,FromX,FromY,ToX
+			,ToY,Result,BinCode,BinDesc,SAPBarcode,Pick,Active,LotId,OpId,InsertDateTime,EqpId)
+			SELECT
+			tpl.DeviceId, tpl.AliasId, tpl.SourceSubstrateId, tpl.TargetSubstrateId, 
+			tpl.SourcePositionId, tpl.TargetPositionId, tpl.FromX, tpl.FromY, tpl.ToX
+			, tpl.ToY, tpl.Result, tpl.BinCode, tpl.BinDesc, tpl.SAPBarcode, tpl.Pick,
+			1, (SELECT LotId FROM DIS_Lot WHERE LotNumber = @I_MotherLot), tpl.OpId, @CurrDate, tpl.EqpId
+			FROM  #TMPMergeDevicesList tpl
+			ORDER BY tpl.Id ASC
+
+			DROP TABLE #TMPMergeDevicesList
+
+		COMMIT TRANSACTION @TRANS_NAME
+
+	END TRY
+	BEGIN CATCH
+		SET @O_Success = -1
+		SELECT @ERR_NUM = ERROR_NUMBER(), @ERR_MSG = ERROR_MESSAGE()
+		ROLLBACK TRANSACTION @TRANS_NAME
+		SET @O_ErrTxt = @ERR_MSG
+	END CATCH
+END
+GO
+/****** Object:  StoredProcedure [dbo].[PR_DIS_UpdateSplitDevice]    Script Date: 3/18/2022 1:09:34 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author: Jackson
+-- Create date: 02/03/2022
+-- Version: 1.0.0.0
+-- Description:	To Update Split Device Information
+-- =============================================
+CREATE PROCEDURE [dbo].[PR_DIS_UpdateSplitDevice]
+	@Tbl_DeviceInformationList DIS_DeviceInformationList READONLY,
+	@Tbl_ChildDeviceInformationList DIS_DeviceInformationList READONLY,
+	@I_MotherLot VARCHAR(50),
+	@I_ChildLot VARCHAR(50),
+	@I_Operation INT,
+	@I_Equipment VARCHAR(250),
+	@O_Success INT OUTPUT,
+	@O_ErrTxt VARCHAR(250) OUTPUT
+
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	DECLARE @ERR_NUM INT, @ERR_MSG NVARCHAR(4000)
+	DECLARE @TRANS_NAME VARCHAR(50)
+	DECLARE @CurrDateTime DATETIME, @LotCount INT
+
+	SET NOCOUNT ON;
+	SET @TRANS_NAME = 'UpdateSplitDevice'
+	SET @O_Success = 0
+	SET @CurrDateTime = GETDATE()
+
+	BEGIN TRY
+		BEGIN TRANSACTION @TRANS_NAME
+			
+			SELECT * INTO #TMPDeviceInfo FROM @Tbl_DeviceInformationList
+			
+			SELECT * INTO #TMPChildDeviceInfo FROM @Tbl_ChildDeviceInformationList
+
+			SELECT @LotCount = COUNT(LotId) FROM DIS_Lot
+			WHERE LotNumber = @I_ChildLot
+
+			IF @LotCount = 0
+			BEGIN
+				INSERT INTO DIS_Lot
+				(LotNumber)
+				VALUES
+				(@I_ChildLot)
+			END
+
+			UPDATE DIS_DeviceInformation
+			SET 
+			Active = 0
+			FROM DIS_DeviceInformation di
+			LEFT JOIN #TMPDeviceInfo tmp ON tmp.DeviceId = di.DeviceId
+			LEFT JOIN #TMPChildDeviceInfo tmpc ON tmpc.DeviceId = di.DeviceId
+			INNER JOIN DIS_Lot l ON l.LotId = di.LotId
+			WHERE l.LotNumber = @I_MotherLot AND di.Active = 1
+
+			INSERT INTO DIS_DeviceInformation
+			(DeviceId,AliasId,SourceSubstrateId,TargetSubstrateId,SourcePositionId,TargetPositionId,FromX,FromY,ToX
+			,ToY,Result,BinCode,BinDesc,SAPBarcode,Pick,Active,LotId,OpId,InsertDateTime,EqpId)
+			SELECT
+			tpi.DeviceId, tpi.AliasId, tpi.SourceSubstrateId, tpi.TargetSubstrateId, 
+			tpi.SourcePositionId, tpi.TargetPositionId, tpi.FromX, tpi.FromY, tpi.ToX
+			, tpi.ToY, 
+			Result = CASE WHEN tpi.Result = 'UNKNOWN' THEN 'PREV FAIL' ELSE tpi.Result END,
+			tpi.BinCode, tpi.BinDesc, '', Pick = CASE WHEN tpi.Result = 'UNKNOWN' OR tpi.Result = 'FAIL' THEN 0 ELSE 1 END,
+			1, (SELECT LotId FROM DIS_Lot WHERE LotNumber = @I_MotherLot), @I_Operation, @CurrDateTime, 
+			(SELECT EqpId FROM DIS_Equipment WHERE EquipmentName = @I_Equipment)
+			FROM  #TMPDeviceInfo tpi
+
+			DROP TABLE #TMPDeviceInfo
+
+			INSERT INTO DIS_DeviceInformation
+			(DeviceId,AliasId,SourceSubstrateId,TargetSubstrateId,SourcePositionId,TargetPositionId,FromX,FromY,ToX
+			,ToY,Result,BinCode,BinDesc,SAPBarcode,Pick,Active,LotId,OpId,InsertDateTime,EqpId)
+			SELECT
+			tpic.DeviceId, tpic.AliasId, tpic.SourceSubstrateId, tpic.TargetSubstrateId, 
+			tpic.SourcePositionId, tpic.TargetPositionId, tpic.FromX, tpic.FromY, tpic.ToX
+			, tpic.ToY, 
+			Result = CASE WHEN tpic.Result = 'UNKNOWN' THEN 'PREV FAIL' ELSE tpic.Result END,
+			tpic.BinCode, tpic.BinDesc, '', Pick = CASE WHEN tpic.Result = 'UNKNOWN' OR tpic.Result = 'FAIL' THEN 0 ELSE 1 END,
+			1, (SELECT LotId FROM DIS_Lot WHERE LotNumber = @I_ChildLot), @I_Operation, @CurrDateTime, 
+			(SELECT EqpId FROM DIS_Equipment WHERE EquipmentName = @I_Equipment)
+			FROM  #TMPChildDeviceInfo tpic
+
+			DROP TABLE #TMPChildDeviceInfo
+
+
+		COMMIT TRANSACTION @TRANS_NAME
+
+	END TRY
+	BEGIN CATCH
+		SET @O_Success = -1
+		SELECT @ERR_NUM = ERROR_NUMBER(), @ERR_MSG = ERROR_MESSAGE()
+		ROLLBACK TRANSACTION @TRANS_NAME
+		SET @O_ErrTxt = @ERR_MSG
+	END CATCH
+END
+GO
+USE [master]
+GO
+ALTER DATABASE [DISDB] SET  READ_WRITE 
+GO
