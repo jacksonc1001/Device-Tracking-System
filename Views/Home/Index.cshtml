@@ -21,11 +21,11 @@
 {
     <div class="row">
         <div class="col-md-4">
-            <h3 id="SplitLotTitle">Split Lot</h3>
-            <p id="SplitLot">
+            <h3 id="SplitTitle">Split Devices</h3>
+            <p id="SplitDevice">
                 DTS providing an interface for user to scan the Device ID, validate and split the devices.
             </p>
-            <p><a class="btn btn-default" href="@Url.Action("SplitStandardLotValidate", "SplitLot")">Go &raquo;</a></p>
+            <p><a class="btn btn-default" href="@Url.Action("LotValidate", "Split")">Go &raquo;</a></p>
         </div>
         <div class="col-md-4">
             <h3 id="DMCTitle">Device Validation</h3>
@@ -35,7 +35,7 @@
             <p><a class="btn btn-default" href="@Url.Action("PassedDeviceLotValidate", "DMCValidation")">Go &raquo;</a></p>
         </div>
         <div class="col-md-4">
-            <h3 id="MergeTitle">Merge Lot</h3>
+            <h3 id="MergeTitle">Merge Devices</h3>
             <p id="MergeLot">DTS providing an interface for user to validate the mother lot and child lot, display the devices for the lots and merge the child lots with mother lot.</p>
             <p><a class="btn btn-default" href="@Url.Action("MergeLotValidate", "MergeLot")">Go &raquo;</a></p>
         </div>

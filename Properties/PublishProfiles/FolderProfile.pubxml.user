@@ -5,7 +5,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <_PublishTargetUrl>C:\Users\31773\OneDrive - Osram GmbH\WOU\Final Year Project\Device Tracking System\Device Tracking System\bin\app.publish\</_PublishTargetUrl>
-    <History>True|2022-03-17T17:22:51.0183615Z;True|2022-03-14T03:13:27.2783819+08:00;True|2022-03-11T17:32:09.7978298+08:00;True|2022-03-11T16:28:26.3978397+08:00;</History>
+    <History>True|2022-03-18T07:49:02.0836732Z;True|2022-03-18T01:22:51.0183615+08:00;True|2022-03-14T03:13:27.2783819+08:00;True|2022-03-11T17:32:09.7978298+08:00;True|2022-03-11T16:28:26.3978397+08:00;</History>
   </PropertyGroup>
   <ItemGroup>
     <File Include="bin/Antlr3.Runtime.dll">
@@ -180,10 +180,10 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>03/11/2022 18:53:37</publishTime>
     </File>
     <File Include="bin/Device Tracking System.dll">
-      <publishTime>03/18/2022 01:22:49</publishTime>
+      <publishTime>03/18/2022 15:49:00</publishTime>
     </File>
     <File Include="bin/Device Tracking System.pdb">
-      <publishTime>03/18/2022 01:22:49</publishTime>
+      <publishTime>03/18/2022 15:49:00</publishTime>
     </File>
     <File Include="bin/es/DevExpress.Data.v16.1.resources.dll">
       <publishTime>03/11/2022 18:53:38</publishTime>
@@ -614,6 +614,15 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
     <File Include="Content/sweetalert.css">
       <publishTime>03/11/2022 18:53:36</publishTime>
     </File>
+    <File Include="Database_Scripts/DISDB_Script.txt">
+      <publishTime>03/18/2022 01:34:44</publishTime>
+    </File>
+    <File Include="Database_Scripts/DTSDB_Script.txt">
+      <publishTime>03/18/2022 01:34:44</publishTime>
+    </File>
+    <File Include="Database_Scripts/MESDB_Script.txt">
+      <publishTime>03/18/2022 01:34:44</publishTime>
+    </File>
     <File Include="favicon.ico">
       <publishTime>03/11/2022 18:53:38</publishTime>
     </File>
@@ -741,7 +750,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>03/11/2022 18:53:36</publishTime>
     </File>
     <File Include="Views/Home/Index.cshtml">
-      <publishTime>03/11/2022 18:53:36</publishTime>
+      <publishTime>03/18/2022 15:46:45</publishTime>
     </File>
     <File Include="Views/Home/ViewDocument.cshtml">
       <publishTime>03/11/2022 18:53:36</publishTime>
